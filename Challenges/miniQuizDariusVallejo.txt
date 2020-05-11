@@ -1,0 +1,29 @@
+Q1: Which tag is used to create hyperlinks that can be clicked to navigate to other documents?
+a) <link>
+b) <src>
+c) <a> (correct)
+d) <nav>
+
+Q2: Which media query will crete a new layout for mobile devices with small screens?
+a) @media (max-width: 2000px)
+b) @media (max-width: 500px) and (orientation: portrait) (correct)
+c) @media (min-width: 800px) and (orientation: portrait)
+d) @media (min-width: 2000px)
+
+Q3: Which of the following actions are NOT idempotent?
+a) Getting a list of users from a website
+b) Deleting a particular user from a website
+c) Updating a user's login information on a website
+d) Creating a new user on a website (correct)
+
+Q4: Which controller is called when none is specified?
+a) Base Controller
+c) Index Controller
+d) Home Controller (correct)
+e) View Controller
+
+Q5: What is the default action method of a controller if none is provided?
+a) Index (correct)
+b) Home 
+c) Base
+d) Main
