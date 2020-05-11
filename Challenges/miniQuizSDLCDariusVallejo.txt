@@ -1,0 +1,31 @@
+Q1: How many SDLC stages are there?
+a) 5
+b) 7
+c) 10
+d) It varies by implementation (correct)
+
+Q2: What are some problems with the waterfall model?
+a) Not ideal for complex projects with unclear requirements
+b) Lots of time needed for each stage
+c) Certain bugs may never be rectified
+d) All of the above (correct)
+
+Q3: Which SDLC model is best suited for a fast paced environment with changing requirements?
+a) Iterative
+b) Big Bang
+c) Agile (correct)
+d) Spiral
+
+Q4: When is the cost of error correction the lowest during the SDLC?
+a) At the beginning, during requirements gathering (correct)
+b) At the middle, during development
+c) At the end, during deploying
+d) It is the same throughout
+
+Q5: Which SDLC model is best suited where all requirements are available upfront and will not change?
+a) Waterfall (correct)
+b) Kanban
+c) Spiral
+d) Iterative
+
+Q5: 
