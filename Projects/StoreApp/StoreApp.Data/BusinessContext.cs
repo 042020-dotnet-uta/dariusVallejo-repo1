@@ -15,6 +15,7 @@ namespace StoreApp.Data {
         {
             if (!options.IsConfigured)
             {
+                // TODO Move to some properties file?
                 options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=business;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
