@@ -12,10 +12,12 @@ namespace StoreApp.WebApp.Controllers
     public class CustomerController : Controller
     {
         private readonly BusinessContext _context;
+        private readonly IRepository _repository;
 
-        public CustomerController(BusinessContext context)
+        public CustomerController(BusinessContext context, IRepository repository)
         {
             _context = context;
+            _repository = repository;
         }
 
         // GET: Customer
@@ -57,8 +59,9 @@ namespace StoreApp.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
+                // _context.Add(customer);
+                // await _context.SaveChangesAsync();
+                await _repository.createAsync(customer);
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
