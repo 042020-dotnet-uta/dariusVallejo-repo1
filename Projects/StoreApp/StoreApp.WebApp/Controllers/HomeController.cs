@@ -6,20 +6,31 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StoreApp.WebApp.Models;
+using StoreApp.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace StoreApp.WebApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IRepository _repository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IRepository repository)
         {
             _logger = logger;
+            _repository = repository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var username = HttpContext.Session.GetString("Username");
+            if (username != null) {
+                var viewModel = new CustomerViewModel {
+                    Username = username
+                };
+                return View(viewModel);
+            }
             return View();
         }
 
