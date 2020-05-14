@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StoreApp.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Session;
 
 namespace StoreApp.WebApp
 {
@@ -27,9 +28,13 @@ namespace StoreApp.WebApp
         {
             services.AddControllersWithViews();
 
+            // Database stuff
             services.AddDbContext<BusinessContext>(options => options.UseSqlServer(Configuration.GetConnectionString("business")));
-        
             services.AddScoped<IRepository, Repository>();
+
+            // Cookie stuff
+            services.AddDistributedMemoryCache();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +56,9 @@ namespace StoreApp.WebApp
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCookiePolicy();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

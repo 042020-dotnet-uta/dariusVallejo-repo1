@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StoreApp.Data;
+using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.Http;
 
 namespace StoreApp.WebApp.Controllers
 {
@@ -44,9 +46,39 @@ namespace StoreApp.WebApp.Controllers
             return View(customer);
         }
 
+        // GET: Customer/Login
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        // POST: Customer/Login
+        [HttpPost]
+        [ValidateAntiForgeryToken] // ???
+        public async Task<IActionResult> Login(CustomerViewModel customer)
+        {
+            var entity = new Customer
+            {
+                Username = customer.Username,
+                Password = customer.Password
+            };
+            var result = await _repository.findAsync(entity);
+            if (result != null)
+            {
+                HttpContext.Session.SetString("Username", result.Username);
+                return RedirectToAction("Index", "");
+            }
+
+            return View();
+        }
+
         // GET: Customer/Create
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetString("Username") != null)
+            {
+                return RedirectToAction("Index", "");
+            }
             return View();
         }
 
@@ -60,15 +92,17 @@ namespace StoreApp.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var entity = new Customer {
+                var entity = new Customer
+                {
+                    Username = customer.Username,
                     FirstName = customer.FirstName,
                     LastName = customer.LastName,
                     Email = customer.Email,
                     Password = customer.Password
                 };
-                // _context.Add(customer);
-                // await _context.SaveChangesAsync();
+
                 await _repository.createAsync(entity);
+                HttpContext.Session.SetString("Username", entity.Username);
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
