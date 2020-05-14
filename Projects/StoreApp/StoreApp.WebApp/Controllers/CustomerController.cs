@@ -67,9 +67,10 @@ namespace StoreApp.WebApp.Controllers
             {
                 HttpContext.Session.SetString("Username", result.Username);
                 return RedirectToAction("Index", "");
+            } else {
+                ModelState.AddModelError("Password", "Username or password is incorrect.");
+                return View();
             }
-
-            return View();
         }
 
         // GET: Customer/Create
