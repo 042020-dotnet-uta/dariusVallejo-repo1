@@ -55,13 +55,20 @@ namespace StoreApp.WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName")] Customer customer)
+        // public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName,Email,Password")] Customer customer)
+        public async Task<IActionResult> Create(CustomerViewModel customer)
         {
             if (ModelState.IsValid)
             {
+                var entity = new Customer {
+                    FirstName = customer.FirstName,
+                    LastName = customer.LastName,
+                    Email = customer.Email,
+                    Password = customer.Password
+                };
                 // _context.Add(customer);
                 // await _context.SaveChangesAsync();
-                await _repository.createAsync(customer);
+                await _repository.createAsync(entity);
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
@@ -88,7 +95,7 @@ namespace StoreApp.WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,FirstName,LastName")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,FirstName,LastName,Email,Password")] Customer customer)
         {
             if (id != customer.CustomerId)
             {

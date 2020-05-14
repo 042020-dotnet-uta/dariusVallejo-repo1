@@ -11,10 +11,10 @@ namespace StoreApp.Data {
             _context = context;
         }
 
-        // TODO Change parameter input to generic CUSTOMER object
+        // TODO Change parameter input to generic object
         public async Task createAsync(Customer entity) {
-            // var entity = new Customer { FirstName = firstName, LastName = lastName };
-            if (await _context.Customers.AnyAsync(c => c.FirstName == entity.FirstName)) {
+            // TODO Meaningful exceptions that don't break
+            if (await _context.Customers.AnyAsync(c => c.Username == entity.Username)) {
                  throw new InvalidOperationException("Already exists.");
             }
             _context.Add(entity);
