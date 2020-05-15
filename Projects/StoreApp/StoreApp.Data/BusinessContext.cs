@@ -10,6 +10,9 @@ namespace StoreApp.Data {
         }
 
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {

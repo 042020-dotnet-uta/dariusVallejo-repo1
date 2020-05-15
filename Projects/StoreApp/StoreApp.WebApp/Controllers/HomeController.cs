@@ -22,7 +22,7 @@ namespace StoreApp.WebApp.Controllers
             _repository = repository;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var username = HttpContext.Session.GetString("Username");
             if (username != null) {
