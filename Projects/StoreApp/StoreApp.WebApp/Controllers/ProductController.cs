@@ -10,30 +10,35 @@ using StoreApp.BusinessLogic;
 
 namespace StoreApp.WebApp.Controllers
 {
-    public class LocationController : Controller
+    public class ProductController : Controller
     {
         private readonly BusinessContext _context;
         private readonly IRepository _repository;
 
-        public LocationController(BusinessContext context, IRepository repository)
+        public ProductController(BusinessContext context, IRepository repository)
         {
             _context = context;
             _repository = repository;
         }
 
-        // GET: Location
-        public async Task<IActionResult> Index()
-        {
-            var databaseLocations = await _repository.listLocationsAsync();
-            var locationViews = databaseLocations.Select(
-                databaseLocation => new LocationViewModel {
-                LocationId = databaseLocation.LocationId,
-                LocationName = databaseLocation.LocationName
-            });
-            return View(locationViews);
+        // POST: Product
+        public async Task<IActionResult> Index(int id) {
+            BusinessLocation businessLocation = new BusinessLocation {
+                LocationId = id
+            };
+            var databaseProducts = await _repository.listProductsAsync(businessLocation);
+            var productViews = databaseProducts.Select(
+                databaseProduct => new ProductViewModel {
+                    ProductId = databaseProduct.ProductId,
+                    ProductName = databaseProduct.ProductName,
+                    ProductPrice = databaseProduct.ProductPrice,
+                    Quantity = databaseProduct.Quantity
+                }
+            );
+            return View(productViews);
         }
 
-        // GET: Location/Details/5
+        // GET: Product/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -41,39 +46,39 @@ namespace StoreApp.WebApp.Controllers
                 return NotFound();
             }
 
-            var location = await _context.Locations
-                .FirstOrDefaultAsync(m => m.LocationId == id);
-            if (location == null)
+            var product = await _context.Products
+                .FirstOrDefaultAsync(m => m.ProductId == id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            return View(location);
+            return View(product);
         }
 
-        // GET: Location/Create
+        // GET: Product/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Location/Create
+        // POST: Product/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LocationId,LocationName")] Location location)
+        public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductPrice")] Product product)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(location);
+                _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(location);
+            return View(product);
         }
 
-        // GET: Location/Edit/5
+        // GET: Product/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,22 +86,22 @@ namespace StoreApp.WebApp.Controllers
                 return NotFound();
             }
 
-            var location = await _context.Locations.FindAsync(id);
-            if (location == null)
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
             {
                 return NotFound();
             }
-            return View(location);
+            return View(product);
         }
 
-        // POST: Location/Edit/5
+        // POST: Product/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LocationId,LocationName")] Location location)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,ProductPrice")] Product product)
         {
-            if (id != location.LocationId)
+            if (id != product.ProductId)
             {
                 return NotFound();
             }
@@ -105,12 +110,12 @@ namespace StoreApp.WebApp.Controllers
             {
                 try
                 {
-                    _context.Update(location);
+                    _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LocationExists(location.LocationId))
+                    if (!ProductExists(product.ProductId))
                     {
                         return NotFound();
                     }
@@ -121,10 +126,10 @@ namespace StoreApp.WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(location);
+            return View(product);
         }
 
-        // GET: Location/Delete/5
+        // GET: Product/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -132,30 +137,30 @@ namespace StoreApp.WebApp.Controllers
                 return NotFound();
             }
 
-            var location = await _context.Locations
-                .FirstOrDefaultAsync(m => m.LocationId == id);
-            if (location == null)
+            var product = await _context.Products
+                .FirstOrDefaultAsync(m => m.ProductId == id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            return View(location);
+            return View(product);
         }
 
-        // POST: Location/Delete/5
+        // POST: Product/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var location = await _context.Locations.FindAsync(id);
-            _context.Locations.Remove(location);
+            var product = await _context.Products.FindAsync(id);
+            _context.Products.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool LocationExists(int id)
+        private bool ProductExists(int id)
         {
-            return _context.Locations.Any(e => e.LocationId == id);
+            return _context.Products.Any(e => e.ProductId == id);
         }
     }
 }

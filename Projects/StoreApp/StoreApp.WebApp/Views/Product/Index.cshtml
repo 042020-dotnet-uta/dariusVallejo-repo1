@@ -1,7 +1,7 @@
 @model IEnumerable<StoreApp.WebApp.ProductViewModel>
 
 @{
-    ViewData["Title"] = "Products";
+    ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
@@ -18,6 +18,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.ProductPrice)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -28,6 +31,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ProductPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
