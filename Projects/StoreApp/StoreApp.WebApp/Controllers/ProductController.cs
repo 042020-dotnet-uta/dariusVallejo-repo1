@@ -23,15 +23,13 @@ namespace StoreApp.WebApp.Controllers
 
         // POST: Product
         public async Task<IActionResult> Index(int id) {
-            BusinessLocation businessLocation = new BusinessLocation {
-                LocationId = id
-            };
-            var databaseProducts = await _repository.listProductsAsync(businessLocation);
+            var databaseProducts = await _repository.listProductsAsync(id);
             var productViews = databaseProducts.Select(
                 databaseProduct => new ProductViewModel {
                     ProductId = databaseProduct.ProductId,
                     ProductName = databaseProduct.ProductName,
                     ProductPrice = databaseProduct.ProductPrice,
+                    LocationId = id,
                     Quantity = databaseProduct.Quantity
                 }
             );
@@ -39,21 +37,28 @@ namespace StoreApp.WebApp.Controllers
         }
 
         // GET: Product/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int productId, int locationId)
         {
-            if (id == null)
+            // if (productId == null)
+            // {
+            //     return NotFound();
+            // }
+
+            // var product = await _context.Products
+            //     .FirstOrDefaultAsync(m => m.ProductId == id);
+            var databaseProduct = await _repository.getProductAsync(productId, locationId);
+            if (databaseProduct == null)
             {
                 return NotFound();
             }
+            ProductViewModel productView = new ProductViewModel {
+                ProductId = databaseProduct.ProductId,
+                ProductName = databaseProduct.ProductName,
+                ProductPrice = databaseProduct.ProductPrice,
+                Quantity = databaseProduct.Quantity
+            };
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.ProductId == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
+            return View(productView);
         }
 
         // GET: Product/Create

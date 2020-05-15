@@ -45,21 +45,33 @@ namespace StoreApp.Data {
             });
         }
 
-        public async Task<IEnumerable<BusinessProduct>> listProductsAsync(BusinessLocation businessLocation) {
-            var databaseProducts = await (from p in _context.Products
+        public async Task<IEnumerable<BusinessProduct>> listProductsAsync(int locationId) {
+            var businessProducts = await (from p in _context.Products
                                                     join i in _context.Inventories
                                                     on p.ProductId equals i.Product.ProductId
                                                     select new {
                                                         Product = p,
                                                         Quantity = i.Quantity,
                                                         LocationId = i.Location.LocationId
-                                                    }).Where(a => a.LocationId == businessLocation.LocationId).ToListAsync();
-            return databaseProducts.Select(dp => new BusinessProduct {
-                ProductId = dp.Product.ProductId,
-                ProductName = dp.Product.ProductName,
-                ProductPrice = dp.Product.ProductPrice,
-                Quantity = dp.Quantity
+                                                    }).Where(a => a.LocationId == locationId).ToListAsync();
+            return businessProducts.Select(bp => new BusinessProduct {
+                ProductId = bp.Product.ProductId,
+                ProductName = bp.Product.ProductName,
+                ProductPrice = bp.Product.ProductPrice,
+                LocationId = locationId,
+                Quantity = bp.Quantity,
             });
+        }
+
+        public async Task<BusinessProduct> getProductAsync(int productId, int locationId) {
+            var result = await listProductsAsync(locationId);
+            return result.Select(bp => new BusinessProduct {
+                ProductId = bp.ProductId,
+                ProductName = bp.ProductName,
+                ProductPrice = bp.ProductPrice,
+                LocationId = locationId,
+                Quantity = bp.Quantity,
+            }).Where(p => p.ProductId == productId && p.LocationId == p.LocationId).FirstOrDefault();
         }
     }
 }

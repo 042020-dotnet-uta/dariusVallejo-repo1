@@ -8,7 +8,7 @@ namespace StoreApp.BusinessLogic {
 
         Task<IEnumerable<BusinessLocation>> listLocationsAsync();
 
-        Task<IEnumerable<BusinessProduct>> listProductsAsync(BusinessLocation location);
-        // Task<BusinessProduct> getProductAsync(int id);
+        Task<IEnumerable<BusinessProduct>> listProductsAsync(int locationId);
+        Task<BusinessProduct> getProductAsync(int productId, int locationId);
     }
 }

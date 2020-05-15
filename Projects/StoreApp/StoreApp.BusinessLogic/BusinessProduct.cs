@@ -7,6 +7,7 @@ namespace StoreApp.BusinessLogic {
         public string ProductName { get; set; }
         public float ProductPrice { get; set; }
         
+        public int LocationId { get; set; }
         public int Quantity { get; set; }
         public IEnumerable<BusinessInventory> Inventories { get; set; }
     }
