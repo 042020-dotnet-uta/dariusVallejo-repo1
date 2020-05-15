@@ -26,6 +26,4 @@ Q5: Which SDLC model is best suited where all requirements are available upfront
 a) Waterfall (correct)
 b) Kanban
 c) Spiral
-d) Iterative
-
-Q5: 
+d) Iterative 

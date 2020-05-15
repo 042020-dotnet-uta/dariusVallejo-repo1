@@ -1,0 +1,29 @@
+Q1: Which of the following is an example of a SaaS?
+a) Google Apps (correct)
+b) Amazon Web Services
+c) Microsoft Azure
+d) Kubernetes
+
+Q2: Which of the following is an example of a PaaS?
+a) Salesforce
+b) Dropbox
+c) Slack
+d) None of the above (correct)
+
+Q3: What type of cloud scaling would you use to run a service in different geographical locations?
+a) Vertical Scaling
+b) Horizontal Scaling
+c) Global Scaling (correct)
+d) Auto Scaling
+
+Q4: A well defined typical service-level agreement will NOT include what?
+a) Strict rules on exactly how and when to use the service (correct)
+b) Type of service to be provided
+c) The service's desired performance level
+d) Response and issue resolution time-frame
+
+Q5: What is a common service-performance metrics?
+a) Uptime
+b) Turn-Around Time (TAT)
+c) Total Resolution Time (TRT)
+d) All of the above (correct)
