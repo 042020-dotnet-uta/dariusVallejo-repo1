@@ -136,10 +136,11 @@ C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Customer\Edit.cshtml.g.cs
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Customer\Index.cshtml.g.cs
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Customer\Login.cshtml.g.cs
-C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Inventory\Create.cshtml.g.cs
-C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Inventory\Delete.cshtml.g.cs
-C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Inventory\Details.cshtml.g.cs
-C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Inventory\Edit.cshtml.g.cs
-C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Inventory\Index.cshtml.g.cs
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\bin\Debug\netcoreapp3.1\StoreApp.BusinessLogic.dll
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\bin\Debug\netcoreapp3.1\StoreApp.BusinessLogic.pdb
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Location\Create.cshtml.g.cs
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Location\Delete.cshtml.g.cs
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Location\Details.cshtml.g.cs
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Location\Edit.cshtml.g.cs
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Location\Index.cshtml.g.cs
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Location\Products.cshtml.g.cs

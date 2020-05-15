@@ -13,7 +13,7 @@ namespace StoreApp.Data {
             _context = context;
         }
 
-        public async Task<BusinessCustomer> createCustomer(BusinessCustomer customer) {
+        public async Task<BusinessCustomer> createCustomerAsync(BusinessCustomer customer) {
             // TODO Meaningful exceptions that don't break
             if (await _context.Customers.AnyAsync(c => c.Username == customer.Username)) {
                   throw new InvalidOperationException("Already exists.");
@@ -30,11 +30,36 @@ namespace StoreApp.Data {
             return customer;
         }
 
-        public async Task<BusinessCustomer> loginCustomer(BusinessCustomer customer) {
+        public async Task<BusinessCustomer> loginCustomerAsync(BusinessCustomer customer) {
             Customer databaseCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Username == customer.Username && c.Password == customer.Password);
             if (databaseCustomer != null) {
                 return customer;
             } return null;
+        }
+
+        public async Task<IEnumerable<BusinessLocation>> listLocationsAsync() {
+            List<Location> locations = await _context.Locations.ToListAsync();
+            return locations.Select(databaseLocation => new BusinessLocation {
+                LocationId = databaseLocation.LocationId,
+                LocationName = databaseLocation.LocationName
+            });
+        }
+
+        public async Task<IEnumerable<BusinessProduct>> listProductsAsync(BusinessLocation businessLocation) {
+            var databaseProducts = await (from p in _context.Products
+                                                    join i in _context.Inventories
+                                                    on p.ProductId equals i.Product.ProductId
+                                                    select new {
+                                                        Product = p,
+                                                        Quantity = i.Quantity,
+                                                        LocationId = i.Location.LocationId
+                                                    }).Where(a => a.LocationId == businessLocation.LocationId).ToListAsync();
+            return databaseProducts.Select(dp => new BusinessProduct {
+                ProductId = dp.Product.ProductId,
+                ProductName = dp.Product.ProductName,
+                ProductPrice = dp.Product.ProductPrice,
+                Quantity = dp.Quantity
+            });
         }
     }
 }

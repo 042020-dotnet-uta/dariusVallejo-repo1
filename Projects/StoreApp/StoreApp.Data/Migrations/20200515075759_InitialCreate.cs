@@ -57,8 +57,8 @@ namespace StoreApp.Data.Migrations
                     InventoryId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(nullable: false),
-                    LocationId = table.Column<int>(nullable: true),
-                    ProductId = table.Column<int>(nullable: true)
+                    ProductId = table.Column<int>(nullable: true),
+                    LocationId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {

@@ -63,11 +63,11 @@ namespace StoreApp.WebApp.Controllers
                 Username = customerView.Username,
                 Password = customerView.Password
             };
-            var databaseCustomer = await _repository.loginCustomer(businessCustomer);
+            var databaseCustomer = await _repository.loginCustomerAsync(businessCustomer);
             if (databaseCustomer != null)
             {
                 HttpContext.Session.SetString("Username", databaseCustomer.Username);
-                return RedirectToAction("Index", "Inventory");
+                return RedirectToAction("Index", "Location");
             } else {
                 ModelState.AddModelError("Password", "Username or password is incorrect.");
                 return View();
@@ -103,7 +103,7 @@ namespace StoreApp.WebApp.Controllers
                     Password = customerView.Password
                 };
 
-                await _repository.createCustomer(businessCustomer);
+                await _repository.createCustomerAsync(businessCustomer);
                 HttpContext.Session.SetString("Username", businessCustomer.Username);
                 return RedirectToAction(nameof(Index));
             }

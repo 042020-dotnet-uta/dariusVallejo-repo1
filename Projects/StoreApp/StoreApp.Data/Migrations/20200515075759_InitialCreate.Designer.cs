@@ -10,7 +10,7 @@ using StoreApp.Data;
 namespace StoreApp.Data.Migrations
 {
     [DbContext(typeof(BusinessContext))]
-    [Migration("20200515000741_InitialCreate")]
+    [Migration("20200515075759_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -108,11 +108,11 @@ namespace StoreApp.Data.Migrations
 
             modelBuilder.Entity("StoreApp.Data.Inventory", b =>
                 {
-                    b.HasOne("StoreApp.Data.Location", null)
+                    b.HasOne("StoreApp.Data.Location", "Location")
                         .WithMany("Inventories")
                         .HasForeignKey("LocationId");
 
-                    b.HasOne("StoreApp.Data.Product", null)
+                    b.HasOne("StoreApp.Data.Product", "Product")
                         .WithMany("Inventories")
                         .HasForeignKey("ProductId");
                 });

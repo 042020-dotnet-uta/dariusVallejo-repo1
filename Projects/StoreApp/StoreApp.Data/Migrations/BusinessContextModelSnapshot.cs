@@ -106,11 +106,11 @@ namespace StoreApp.Data.Migrations
 
             modelBuilder.Entity("StoreApp.Data.Inventory", b =>
                 {
-                    b.HasOne("StoreApp.Data.Location", null)
+                    b.HasOne("StoreApp.Data.Location", "Location")
                         .WithMany("Inventories")
                         .HasForeignKey("LocationId");
 
-                    b.HasOne("StoreApp.Data.Product", null)
+                    b.HasOne("StoreApp.Data.Product", "Product")
                         .WithMany("Inventories")
                         .HasForeignKey("ProductId");
                 });
