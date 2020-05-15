@@ -10,8 +10,8 @@ using StoreApp.Data;
 namespace StoreApp.Data.Migrations
 {
     [DbContext(typeof(BusinessContext))]
-    [Migration("20200515075759_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200515192039_OrderUpdate")]
+    partial class OrderUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -88,6 +88,55 @@ namespace StoreApp.Data.Migrations
                     b.ToTable("Locations");
                 });
 
+            modelBuilder.Entity("StoreApp.Data.Order", b =>
+                {
+                    b.Property<string>("OrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LocationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OrderDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Total")
+                        .HasColumnType("real");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("StoreApp.Data.OrderItem", b =>
+                {
+                    b.Property<string>("OrderItemId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
+                });
+
             modelBuilder.Entity("StoreApp.Data.Product", b =>
                 {
                     b.Property<int>("ProductId")
@@ -114,6 +163,28 @@ namespace StoreApp.Data.Migrations
 
                     b.HasOne("StoreApp.Data.Product", "Product")
                         .WithMany("Inventories")
+                        .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("StoreApp.Data.Order", b =>
+                {
+                    b.HasOne("StoreApp.Data.Customer", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("StoreApp.Data.Location", "Location")
+                        .WithMany("Order")
+                        .HasForeignKey("LocationId");
+                });
+
+            modelBuilder.Entity("StoreApp.Data.OrderItem", b =>
+                {
+                    b.HasOne("StoreApp.Data.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("StoreApp.Data.Product", "Product")
+                        .WithMany()
                         .HasForeignKey("ProductId");
                 });
 #pragma warning restore 612, 618

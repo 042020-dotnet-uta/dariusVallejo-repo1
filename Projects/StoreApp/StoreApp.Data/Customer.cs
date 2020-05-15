@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace StoreApp.Data {
     public class Customer {
@@ -8,5 +9,7 @@ namespace StoreApp.Data {
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+
+        public ICollection<Order> Orders { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.BusinessLogic\bin\Debug\netstandard2.0\StoreApp.BusinessLogic.deps.json
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.BusinessLogic\bin\Debug\netstandard2.0\StoreApp.BusinessLogic.dll
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.BusinessLogic\bin\Debug\netstandard2.0\StoreApp.BusinessLogic.pdb
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.BusinessLogic\obj\Debug\netstandard2.0\StoreApp.BusinessLogic.csprojAssemblyReference.cache
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.BusinessLogic\obj\Debug\netstandard2.0\StoreApp.BusinessLogic.csproj.CoreCompileInputs.cache
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.BusinessLogic\obj\Debug\netstandard2.0\StoreApp.BusinessLogic.AssemblyInfoInputs.cache
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.BusinessLogic\obj\Debug\netstandard2.0\StoreApp.BusinessLogic.AssemblyInfo.cs

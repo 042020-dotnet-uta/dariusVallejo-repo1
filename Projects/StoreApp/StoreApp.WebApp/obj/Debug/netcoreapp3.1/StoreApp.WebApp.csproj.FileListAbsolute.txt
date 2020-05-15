@@ -148,3 +148,8 @@ C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\StoreApp.WebApp.dll
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\StoreApp.WebApp.pdb
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\StoreApp.WebApp.genruntimeconfig.cache
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\OrderItem\Create.cshtml.g.cs
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\OrderItem\Delete.cshtml.g.cs
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\OrderItem\Details.cshtml.g.cs
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\OrderItem\Edit.cshtml.g.cs
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\OrderItem\Index.cshtml.g.cs
