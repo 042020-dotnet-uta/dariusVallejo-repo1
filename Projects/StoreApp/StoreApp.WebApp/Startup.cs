@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StoreApp.Data;
+using StoreApp.BusinessLogic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Session;
 

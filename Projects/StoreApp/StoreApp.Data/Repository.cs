@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using StoreApp.BusinessLogic;
 
 namespace StoreApp.Data {
     public class Repository : IRepository {
@@ -12,18 +13,28 @@ namespace StoreApp.Data {
             _context = context;
         }
 
-        // TODO Change parameter input to generic object
-        public async Task createAsync(Customer entity) {
+        public async Task<BusinessCustomer> createCustomer(BusinessCustomer customer) {
             // TODO Meaningful exceptions that don't break
-            if (await _context.Customers.AnyAsync(c => c.Username == entity.Username)) {
+            if (await _context.Customers.AnyAsync(c => c.Username == customer.Username)) {
                   throw new InvalidOperationException("Already exists.");
             }
-            _context.Add(entity);
+            Customer newCustomer = new Customer {
+                Username = customer.Username,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                Email = customer.Email,
+                Password = customer.Password
+            };
+            _context.Add(newCustomer);
             await _context.SaveChangesAsync();
+            return customer;
         }
 
-        public async Task<Customer> findAsync(Customer entity) {
-            return await _context.Customers.FirstOrDefaultAsync(c => c.Username == entity.Username && c.Password == entity.Password);
+        public async Task<BusinessCustomer> loginCustomer(BusinessCustomer customer) {
+            Customer databaseCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Username == customer.Username && c.Password == customer.Password);
+            if (databaseCustomer != null) {
+                return customer;
+            } return null;
         }
     }
 }

@@ -10,3 +10,6 @@ C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Data\bin\Debug\netcoreapp3.1\StoreApp.Data.runtimeconfig.json
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Data\bin\Debug\netcoreapp3.1\StoreApp.Data.runtimeconfig.dev.json
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Data\obj\Debug\netcoreapp3.1\StoreApp.Data.genruntimeconfig.cache
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Data\bin\Debug\netcoreapp3.1\StoreApp.BusinessLogic.dll
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Data\bin\Debug\netcoreapp3.1\StoreApp.BusinessLogic.pdb
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Data\obj\Debug\netcoreapp3.1\StoreApp.Data.csproj.CopyComplete

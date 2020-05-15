@@ -1,6 +1,6 @@
+delete from Inventories;
 delete from Locations;
 delete from Products;
-delete from Inventories;
 delete from Customers;
 -- delete from Orders;
 -- delete from OrderItems;
@@ -9,7 +9,6 @@ DBCC CHECKIDENT (Locations, RESEED, 0);
 DBCC CHECKIDENT (Products, RESEED, 0);
 DBCC CHECKIDENT (Inventories, RESEED, 0);
 DBCC CHECKIDENT (Customers, RESEED, 0);
-
 
 Insert into Locations
 VALUES 
@@ -36,12 +35,12 @@ Quantity,
 LocationId,
 ProductId)
 VALUES
-(3, RAND(3) + 1, RAND(9) + 1),
-(3, RAND(3) + 1, RAND(9) + 1),
-(3, RAND(3) + 1, RAND(9) + 1),
-(3, RAND(3) + 1, RAND(9) + 1),
-(3, RAND(3) + 1, RAND(9) + 1),
-(3, RAND(3) + 1, RAND(9) + 1),
-(3, RAND(3) + 1, RAND(9) + 1),
-(3, RAND(3) + 1, RAND(9) + 1),
-(3, RAND(3) + 1, RAND(9) + 1);
+(3, RAND()*(3)+1, RAND()*(9)+1),
+(3, RAND()*(3)+1, RAND()*(9)+1),
+(3, RAND()*(3)+1, RAND()*(9)+1),
+(3, RAND()*(3)+1, RAND()*(9)+1),
+(3, RAND()*(3)+1, RAND()*(9)+1),
+(3, RAND()*(3)+1, RAND()*(9)+1),
+(3, RAND()*(3)+1, RAND()*(9)+1),
+(3, RAND()*(3)+1, RAND()*(9)+1),
+(3, RAND()*(3)+1, RAND()*(9)+1);

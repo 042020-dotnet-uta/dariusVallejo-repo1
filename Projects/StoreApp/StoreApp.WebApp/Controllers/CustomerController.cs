@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using StoreApp.BusinessLogic;
 using StoreApp.Data;
 using Microsoft.AspNetCore.Session;
 using Microsoft.AspNetCore.Http;
@@ -55,18 +56,18 @@ namespace StoreApp.WebApp.Controllers
         // POST: Customer/Login
         [HttpPost]
         [ValidateAntiForgeryToken] // ???
-        public async Task<IActionResult> Login(CustomerViewModel customer)
+        public async Task<IActionResult> Login(CustomerViewModel customerView)
         {
-            var entity = new Customer
+            var businessCustomer = new BusinessCustomer
             {
-                Username = customer.Username,
-                Password = customer.Password
+                Username = customerView.Username,
+                Password = customerView.Password
             };
-            var result = await _repository.findAsync(entity);
-            if (result != null)
+            var databaseCustomer = await _repository.loginCustomer(businessCustomer);
+            if (databaseCustomer != null)
             {
-                HttpContext.Session.SetString("Username", result.Username);
-                return RedirectToAction("Index", "");
+                HttpContext.Session.SetString("Username", databaseCustomer.Username);
+                return RedirectToAction("Index", "Inventory");
             } else {
                 ModelState.AddModelError("Password", "Username or password is incorrect.");
                 return View();
@@ -89,24 +90,24 @@ namespace StoreApp.WebApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         // public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName,Email,Password")] Customer customer)
-        public async Task<IActionResult> Create(CustomerViewModel customer)
+        public async Task<IActionResult> Create(CustomerViewModel customerView)
         {
             if (ModelState.IsValid)
             {
-                var entity = new Customer
+                var businessCustomer = new BusinessCustomer
                 {
-                    Username = customer.Username,
-                    FirstName = customer.FirstName,
-                    LastName = customer.LastName,
-                    Email = customer.Email,
-                    Password = customer.Password
+                    Username = customerView.Username,
+                    FirstName = customerView.FirstName,
+                    LastName = customerView.LastName,
+                    Email = customerView.Email,
+                    Password = customerView.Password
                 };
 
-                await _repository.createAsync(entity);
-                HttpContext.Session.SetString("Username", entity.Username);
+                await _repository.createCustomer(businessCustomer);
+                HttpContext.Session.SetString("Username", businessCustomer.Username);
                 return RedirectToAction(nameof(Index));
             }
-            return View(customer);
+            return View(customerView);
         }
 
         // GET: Customer/Edit/5
