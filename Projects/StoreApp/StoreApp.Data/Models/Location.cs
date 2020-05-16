@@ -7,6 +7,6 @@ namespace StoreApp.Data {
         public string LocationName { get; set; }
 
         public ICollection<Inventory> Inventories { get; set; }
-        public ICollection<Order> Order { get; set; }
+        public ICollection<Order> Orders { get; set; }
     }
 }

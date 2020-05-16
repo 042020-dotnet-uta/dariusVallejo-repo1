@@ -2,8 +2,8 @@ delete from Inventories;
 delete from Locations;
 delete from Products;
 delete from Customers;
--- delete from Orders;
--- delete from OrderItems;
+delete from OrderItems;
+delete from Orders;
 
 DBCC CHECKIDENT (Locations, RESEED, 0);
 DBCC CHECKIDENT (Products, RESEED, 0);

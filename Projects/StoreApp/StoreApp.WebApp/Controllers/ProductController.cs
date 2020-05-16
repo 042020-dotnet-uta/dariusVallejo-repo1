@@ -55,6 +55,7 @@ namespace StoreApp.WebApp.Controllers
                 ProductId = databaseProduct.ProductId,
                 ProductName = databaseProduct.ProductName,
                 ProductPrice = databaseProduct.ProductPrice,
+                LocationId = databaseProduct.LocationId,
                 Quantity = databaseProduct.Quantity
             };
 

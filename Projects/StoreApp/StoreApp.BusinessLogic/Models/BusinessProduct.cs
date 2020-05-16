@@ -9,6 +9,6 @@ namespace StoreApp.BusinessLogic {
         
         public int LocationId { get; set; }
         public int Quantity { get; set; }
-        public IEnumerable<BusinessInventory> Inventories { get; set; }
+        public ISet<BusinessInventory> Inventories { get; set; }
     }
 }

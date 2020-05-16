@@ -25,25 +25,86 @@ namespace StoreApp.WebApp.Controllers
         // GET: OrderItem
         public async Task<IActionResult> Index()
         {
-            return View(await _context.OrderItems.ToListAsync());
+            // TODO List all locations carts for customer
+            var sessionValue = HttpContext.Session.GetInt32("CustomerId");
+            if (sessionValue != null) {
+                int customerId = Convert.ToInt32(sessionValue);
+                var orderItems = await _repository.listOrderItemsAsync(customerId, -1);
+                if (orderItems != null) {
+                    var orderItemViews = orderItems.Select(oi => new OrderItemViewModel {
+                        OrderId = oi.Order.OrderId,
+                        ProductId = oi.Product.ProductId,
+                        ProductName = oi.Product.ProductName,
+                        ProductPrice = oi.Product.ProductPrice,
+                        Quantity = oi.Quantity
+                    });
+                    return View(orderItemViews);   
+                } else {
+                    ModelState.AddModelError(string.Empty, "Your cart is empty.");
+                }
+            }
+            return View(new List<OrderItemViewModel>());
+            // return View(orderItemView);
+            // return View(await _context.OrderItems.ToListAsync());
         }
 
         // GET: OrderItem/Details/5
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var sessionValue = HttpContext.Session.GetInt32("CustomerId");
+            if (sessionValue != null) {
+                int customerId = Convert.ToInt32(sessionValue);
 
-            var orderItem = await _context.OrderItems
-                .FirstOrDefaultAsync(m => m.OrderItemId == id);
-            if (orderItem == null)
-            {
-                return NotFound();
-            }
+                if (id == null) {
+                    // (IEnumerable) orderItemViews = HttpContext.Current.Session["orderItemViews"];
+                    return View();
+                } else {
+                    // TODO Specific order details
+                }
 
-            return View(orderItem);
+            }
+            return View();
+        }
+
+        // TODO Add empty order check
+        public async Task<IActionResult> Submit()
+        {
+            var sessionValue = HttpContext.Session.GetInt32("CustomerId");
+            int customerId = Convert.ToInt32(sessionValue);
+
+            // get all the orders for the customer that has no order date
+            var orders = await _repository.listOrdersByCustomerAsync(customerId);
+            orders = orders.Where(o => o.OrderDate == null);
+
+            List<OrderItemViewModel> orderItemViews = new List<OrderItemViewModel>();
+            
+            // for each order item in each order, update the inventory for that item at that location
+            foreach (var order in orders) {
+                int orderId = order.OrderId;
+                int locationId = order.Location.LocationId;
+                var orderItems = await _repository.listOrderItemsAsync(customerId, orderId);
+                
+                foreach (var orderItem in orderItems) {
+                    int productId = orderItem.Product.ProductId;
+                    var product = await _repository.getProductAsync(productId, locationId);
+                    // await _repository.updateInventory(inventoryId, orderItem)?
+                    await _repository.updateInventoryAsync(locationId, orderItem);
+                    await _repository.submitOrderAsync(order);
+                    orderItemViews.Add(new OrderItemViewModel {
+                        OrderItemId = orderItem.OrderItemId,
+                        OrderId = orderId,
+                        ProductId = product.ProductId,
+                        ProductName = product.ProductName,
+                        ProductPrice = product.ProductPrice,
+                        Quantity = orderItem.Quantity
+                    });
+                }
+            }
+            
+            // print the order items to the screen
+            // TempData["orderItemViews"] = orderItemViews;
+            // HttpContext.Current.Session.Add("orderItemViews", orderItemViews);
+            return View(orderItemViews);
         }
 
         // GET: OrderItem/Create
@@ -57,39 +118,31 @@ namespace StoreApp.WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(OrderItemViewModel orderItemView)
+        public async Task<IActionResult> Create(OrderItemViewModel orderItemView, int locationId)
         {
-            string username = HttpContext.Session.GetString("Username");
-            if (ModelState.IsValid && username != null)
+            Console.WriteLine(orderItemView.LocationId);
+            Console.WriteLine(orderItemView.ProductId);
+            var sessionValue = HttpContext.Session.GetInt32("CustomerId");
+            if (ModelState.IsValid && sessionValue != null)
             {
-                // get customer for username
-                BusinessCustomer businessCustomer = await _repository.getCustomerByUsernameAsync(username);
-                int customerId = businessCustomer.CustomerId;
-
+                int customerId = Convert.ToInt32(sessionValue);
                 // find all orders for a customer id
+                await _repository.createOrderAsync(customerId, locationId);
                 var orders = await _repository.listOrdersByCustomerAsync(customerId);
+                var order = orders.Where(o => o.OrderDate == null).FirstOrDefault();
 
-                // if there isn't one, make it
-                if (orders.Count() == 0) {
-                    await _repository.createOrderAsync(customerId);
-                } else {
-                    // otherwise, get the one WITHOUT an order date
-                    BusinessOrder order = orders.Where(o => o.OrderDate == null).FirstOrDefault();
-
-                    // add the order item to the order
-                    BusinessOrderItem orderItem = new BusinessOrderItem {
-                        Quantity = orderItemView.Quantity,
-                        Order = order,
-                        Product = new BusinessProduct {
-                            ProductId = orderItemView.ProductId,
-                            ProductName = orderItemView.ProductName,
-                            ProductPrice = orderItemView.ProductPrice
-                        }
-                    };
-                    // update the order in the system
-                    await _repository.updateOrderAsync(order, orderItem);
-                }
-
+                // add the order item to the order
+                BusinessOrderItem orderItem = new BusinessOrderItem {
+                    Quantity = orderItemView.Quantity,
+                    Order = order,
+                    Product = new BusinessProduct {
+                        ProductId = orderItemView.ProductId,
+                        ProductName = orderItemView.ProductName,
+                        ProductPrice = orderItemView.ProductPrice
+                    }
+                };
+                // update the order in the system
+                await _repository.updateOrderAsync(order, orderItem);
                 return RedirectToAction(nameof(Index));
             }
             return View();

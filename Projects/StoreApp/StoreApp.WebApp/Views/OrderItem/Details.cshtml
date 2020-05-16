@@ -1,4 +1,4 @@
-@model StoreApp.Data.OrderItem
+@model IEnumerable<StoreApp.WebApp.OrderItemViewModel>
 
 @{
     ViewData["Title"] = "Details";
@@ -6,19 +6,41 @@
 
 <h1>Details</h1>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.OrderItemId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.OrderItemId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.OrderItemId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
 <div>
-    <h4>OrderItem</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Quantity)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.OrderItemId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

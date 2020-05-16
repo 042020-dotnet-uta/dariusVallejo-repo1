@@ -66,7 +66,7 @@ namespace StoreApp.WebApp.Controllers
             var databaseCustomer = await _repository.loginCustomerAsync(businessCustomer);
             if (databaseCustomer != null)
             {
-                HttpContext.Session.SetString("Username", databaseCustomer.Username);
+                HttpContext.Session.SetInt32("CustomerId", databaseCustomer.CustomerId);
                 return RedirectToAction("Index", "Location");
             } else {
                 ModelState.AddModelError("Password", "Username or password is incorrect.");
@@ -77,7 +77,7 @@ namespace StoreApp.WebApp.Controllers
         // GET: Customer/Create
         public IActionResult Create()
         {
-            if (HttpContext.Session.GetString("Username") != null)
+            if (HttpContext.Session.GetInt32("CustomerId") != null)
             {
                 return RedirectToAction("Index", "");
             }
@@ -104,7 +104,6 @@ namespace StoreApp.WebApp.Controllers
                 };
 
                 await _repository.createCustomerAsync(businessCustomer);
-                HttpContext.Session.SetString("Username", businessCustomer.Username);
                 return RedirectToAction(nameof(Index));
             }
             return View(customerView);
