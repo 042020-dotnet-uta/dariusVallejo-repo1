@@ -4,7 +4,7 @@ namespace StoreApp.Data
 {
     public class Order
     {
-        public string OrderId { get; set; }
+        public int OrderId { get; set; }
         public float Total { get; set; }
         public string OrderDate { get; set; }
 

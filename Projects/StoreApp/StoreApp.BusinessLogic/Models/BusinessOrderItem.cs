@@ -6,7 +6,7 @@ namespace StoreApp.BusinessLogic
 {
     public class BusinessOrderItem
     {
-        public string OrderItemId { get; set; }
+        public int OrderItemId { get; set; }
         public int Quantity { get; set; }
 
         public BusinessOrder Order { get; set; }

@@ -10,7 +10,7 @@ namespace StoreApp.Data
     public class OrderItem
     {
         // Keys / columns required to be public
-        public string OrderItemId { get; set; }
+        public int OrderItemId { get; set; }
         public int Quantity { get; set; }
 
         // Foreign key(s)

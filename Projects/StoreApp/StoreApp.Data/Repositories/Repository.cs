@@ -102,33 +102,59 @@ namespace StoreApp.Data {
 
         public async Task<IEnumerable<BusinessOrder>> listOrdersByCustomerAsync(int customerId) {
             // var result = await _context.Orders.Where(o => o.Customer.CustomerId == customerId).ToListAsync();
-            var result = await _context.OrderItems.ToListAsync();
-
-            return result.Select(r => new BusinessOrder {
-                OrderId = r.Order.OrderId,
+            var orders = await _context.Orders.Include(o => o.OrderItems).ToListAsync();
+            return orders.Select(o => new BusinessOrder {
+                OrderId = o.OrderId,
                 // Total = 0,
                 // OrderDate = 0,
+                OrderItems = o.OrderItems.Select(oi => new BusinessOrderItem {
+                    OrderItemId = oi.OrderItemId,
+                    Quantity = oi.Quantity
+                }).ToHashSet()
                 
                 // Customer
                 // Location
-                OrderItems = result.Select(oi => new BusinessOrderItem {
-                    OrderItemId = oi.OrderItemId,
-                    Quantity = oi.Quantity,
+                // OrderItems = o.OrderItems.Select(oi => new BusinessOrderItem {
+                //     OrderItemId = oi.OrderItemId,
+                //     Quantity = oi.Quantity,
 
-                    // Order = oi.Order,
-                    Product = new BusinessProduct {
-                        ProductId = oi.Product.ProductId,
-                        ProductName = oi.Product.ProductName,
-                        ProductPrice = oi.Product.ProductPrice
-                    }
-                }).ToHashSet()
+                //     // Order = oi.Order,
+                //     Product = new BusinessProduct {
+                //         ProductId = oi.Product.ProductId,
+                //         ProductName = oi.Product.ProductName,
+                //         ProductPrice = oi.Product.ProductPrice
+                //     }
+                // }).ToHashSet()
             });
         }
 
         public async Task<BusinessOrder> createOrderAsync(int customerId) {
-            return new BusinessOrder {
-                Customer = await getCustomerByIdAsync(customerId)
+            Customer customer = await _context.Customers.Where(c => c.CustomerId == customerId).FirstOrDefaultAsync();
+            Order order = new Order {
+                Customer = customer,
+                OrderItems = new List<OrderItem>()
             };
+            _context.Add(order);
+            await _context.SaveChangesAsync();
+            return new BusinessOrder();
+        }
+
+        public async Task<BusinessOrder> updateOrderAsync(BusinessOrder businessOrder, BusinessOrderItem businessOrderItem) {
+            Order order = await _context.Orders.Include(o => o.OrderItems).Where(o => o.OrderId == businessOrder.OrderId).FirstOrDefaultAsync();
+            OrderItem orderItem = new OrderItem {
+                Quantity = businessOrderItem.Quantity,
+                Order = order,
+                Product = await _context.Products.Where(p => p.ProductId == businessOrderItem.Product.ProductId).FirstOrDefaultAsync(),
+            };
+            order.OrderItems.Add(orderItem);
+            businessOrder.OrderItems.Add(businessOrderItem);
+            _context.Add(orderItem);
+            await _context.SaveChangesAsync();
+            return businessOrder;
+        }
+
+        public async Task<BusinessOrder> submitOrderAsync(BusinessOrder businessOrder) {
+            return null;
         }
     }
 }

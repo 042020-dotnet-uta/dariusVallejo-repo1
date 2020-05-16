@@ -29,7 +29,7 @@ namespace StoreApp.WebApp.Controllers
         }
 
         // GET: OrderItem/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id == null)
             {
@@ -64,21 +64,32 @@ namespace StoreApp.WebApp.Controllers
             {
                 // get customer for username
                 BusinessCustomer businessCustomer = await _repository.getCustomerByUsernameAsync(username);
+                int customerId = businessCustomer.CustomerId;
 
                 // find all orders for a customer id
-                var businessOrders = await _repository.listOrdersByCustomerAsync(businessCustomer.CustomerId);
+                var orders = await _repository.listOrdersByCustomerAsync(customerId);
 
                 // if there isn't one, make it
-                if (businessOrders.Count() == 0) {
-                    
+                if (orders.Count() == 0) {
+                    await _repository.createOrderAsync(customerId);
                 } else {
                     // otherwise, get the one WITHOUT an order date
+                    BusinessOrder order = orders.Where(o => o.OrderDate == null).FirstOrDefault();
 
                     // add the order item to the order
+                    BusinessOrderItem orderItem = new BusinessOrderItem {
+                        Quantity = orderItemView.Quantity,
+                        Order = order,
+                        Product = new BusinessProduct {
+                            ProductId = orderItemView.ProductId,
+                            ProductName = orderItemView.ProductName,
+                            ProductPrice = orderItemView.ProductPrice
+                        }
+                    };
+                    // update the order in the system
+                    await _repository.updateOrderAsync(order, orderItem);
                 }
 
-                // _context.Add(orderItem);
-                // await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View();
@@ -86,7 +97,7 @@ namespace StoreApp.WebApp.Controllers
         }
 
         // GET: OrderItem/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null)
             {
@@ -106,7 +117,7 @@ namespace StoreApp.WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("OrderItemId,Quantity")] OrderItem orderItem)
+        public async Task<IActionResult> Edit(int id, [Bind("OrderItemId,Quantity")] OrderItem orderItem)
         {
             if (id != orderItem.OrderItemId)
             {
@@ -137,7 +148,7 @@ namespace StoreApp.WebApp.Controllers
         }
 
         // GET: OrderItem/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null)
             {
@@ -157,7 +168,7 @@ namespace StoreApp.WebApp.Controllers
         // POST: OrderItem/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var orderItem = await _context.OrderItems.FindAsync(id);
             _context.OrderItems.Remove(orderItem);
@@ -165,7 +176,7 @@ namespace StoreApp.WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OrderItemExists(string id)
+        private bool OrderItemExists(int id)
         {
             return _context.OrderItems.Any(e => e.OrderItemId == id);
         }

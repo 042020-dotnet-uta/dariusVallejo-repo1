@@ -4,7 +4,7 @@ namespace StoreApp.BusinessLogic
 {
     public class BusinessOrder
     {
-        public string OrderId { get; set; }
+        public int OrderId { get; set; }
         public float Total { get; set; }
         public string OrderDate { get; set; }
 

@@ -51,10 +51,11 @@ namespace StoreApp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order",
+                name: "Orders",
                 columns: table => new
                 {
-                    OrderId = table.Column<string>(nullable: false),
+                    OrderId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Total = table.Column<float>(nullable: false),
                     OrderDate = table.Column<string>(nullable: true),
                     CustomerId = table.Column<int>(nullable: true),
@@ -62,15 +63,15 @@ namespace StoreApp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order", x => x.OrderId);
+                    table.PrimaryKey("PK_Orders", x => x.OrderId);
                     table.ForeignKey(
-                        name: "FK_Order_Customers_CustomerId",
+                        name: "FK_Orders_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "CustomerId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Order_Locations_LocationId",
+                        name: "FK_Orders_Locations_LocationId",
                         column: x => x.LocationId,
                         principalTable: "Locations",
                         principalColumn: "LocationId",
@@ -105,25 +106,26 @@ namespace StoreApp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItem",
+                name: "OrderItems",
                 columns: table => new
                 {
-                    OrderItemId = table.Column<string>(nullable: false),
+                    OrderItemId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(nullable: false),
-                    OrderId = table.Column<string>(nullable: true),
+                    OrderId = table.Column<int>(nullable: true),
                     ProductId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItem", x => x.OrderItemId);
+                    table.PrimaryKey("PK_OrderItems", x => x.OrderItemId);
                     table.ForeignKey(
-                        name: "FK_OrderItem_Order_OrderId",
+                        name: "FK_OrderItems_Orders_OrderId",
                         column: x => x.OrderId,
-                        principalTable: "Order",
+                        principalTable: "Orders",
                         principalColumn: "OrderId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_OrderItem_Products_ProductId",
+                        name: "FK_OrderItems_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
@@ -141,24 +143,24 @@ namespace StoreApp.Data.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_CustomerId",
-                table: "Order",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Order_LocationId",
-                table: "Order",
-                column: "LocationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItem_OrderId",
-                table: "OrderItem",
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItem_ProductId",
-                table: "OrderItem",
+                name: "IX_OrderItems_ProductId",
+                table: "OrderItems",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_CustomerId",
+                table: "Orders",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_LocationId",
+                table: "Orders",
+                column: "LocationId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -167,10 +169,10 @@ namespace StoreApp.Data.Migrations
                 name: "Inventories");
 
             migrationBuilder.DropTable(
-                name: "OrderItem");
+                name: "OrderItems");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Products");

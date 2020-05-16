@@ -38,6 +38,7 @@
         <span asp-validation-for="Quantity" class="text-danger"></span>
     </div>
     <div class="form-group">
+        <input type="hidden" asp-for="ProductId" value="@Model.ProductId" />
         <input type="hidden" asp-for="ProductName" value="@Model.ProductName" />
         <input type="hidden" asp-for="ProductPrice" value="@Model.ProductPrice" />
         <input type="submit" value="Add to cart" class="btn btn-primary" />

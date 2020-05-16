@@ -88,8 +88,10 @@ namespace StoreApp.Data.Migrations
 
             modelBuilder.Entity("StoreApp.Data.Order", b =>
                 {
-                    b.Property<string>("OrderId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");
@@ -114,11 +116,13 @@ namespace StoreApp.Data.Migrations
 
             modelBuilder.Entity("StoreApp.Data.OrderItem", b =>
                 {
-                    b.Property<string>("OrderItemId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("OrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("OrderId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");

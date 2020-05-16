@@ -10,8 +10,8 @@ using StoreApp.Data;
 namespace StoreApp.Data.Migrations
 {
     [DbContext(typeof(BusinessContext))]
-    [Migration("20200515192039_OrderUpdate")]
-    partial class OrderUpdate
+    [Migration("20200516054440_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -90,8 +90,10 @@ namespace StoreApp.Data.Migrations
 
             modelBuilder.Entity("StoreApp.Data.Order", b =>
                 {
-                    b.Property<string>("OrderId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");
@@ -116,11 +118,13 @@ namespace StoreApp.Data.Migrations
 
             modelBuilder.Entity("StoreApp.Data.OrderItem", b =>
                 {
-                    b.Property<string>("OrderItemId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("OrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("OrderId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
