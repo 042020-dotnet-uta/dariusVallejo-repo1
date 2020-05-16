@@ -6,16 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StoreApp.Data;
+using StoreApp.BusinessLogic;
+using Microsoft.AspNetCore.Http;
 
 namespace StoreApp.WebApp.Controllers
 {
     public class OrderItemController : Controller
     {
         private readonly BusinessContext _context;
+        private readonly IRepository _repository;
 
-        public OrderItemController(BusinessContext context)
+        public OrderItemController(BusinessContext context, IRepository repository)
         {
             _context = context;
+            _repository = repository;
         }
 
         // GET: OrderItem
@@ -55,9 +59,24 @@ namespace StoreApp.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(OrderItemViewModel orderItemView)
         {
-            if (ModelState.IsValid)
+            string username = HttpContext.Session.GetString("Username");
+            if (ModelState.IsValid && username != null)
             {
-                Console.WriteLine(orderItemView.ProductName);
+                // get customer for username
+                BusinessCustomer businessCustomer = await _repository.getCustomerByUsernameAsync(username);
+
+                // find all orders for a customer id
+                var businessOrders = await _repository.listOrdersByCustomerAsync(businessCustomer.CustomerId);
+
+                // if there isn't one, make it
+                if (businessOrders.Count() == 0) {
+                    
+                } else {
+                    // otherwise, get the one WITHOUT an order date
+
+                    // add the order item to the order
+                }
+
                 // _context.Add(orderItem);
                 // await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
