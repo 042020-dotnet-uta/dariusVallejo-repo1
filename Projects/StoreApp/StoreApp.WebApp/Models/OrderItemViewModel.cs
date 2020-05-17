@@ -13,7 +13,7 @@ namespace StoreApp.WebApp {
 
         public int LocationId { get; set; }
         public string LocationName { get; set; }
-        public IEnumerable<SelectListItem> Locations { get; set; }
+        public string SearchString { get; set; }
         public int Quantity { get; set; }
     }
 }

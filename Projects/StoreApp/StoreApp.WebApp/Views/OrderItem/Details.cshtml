@@ -12,12 +12,14 @@
 
 <form asp-controller="OrderItem" asp-action="Details" method="post">
     <p>
-        <select>
+        <select name="LocationName">
+            <option value="">All</option>
             @foreach (BusinessLocation location in ViewData["Locations"] as IEnumerable<BusinessLocation>) {
                 <option value=@location.LocationName>@location.LocationName</option>
             }
         </select>
-        
+        <input type="text" name="SearchString" />
+        <input type="submit" value="Search" />
     </p>
 </form>
 <table class="table">

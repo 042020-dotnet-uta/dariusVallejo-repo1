@@ -49,7 +49,7 @@ namespace StoreApp.WebApp.Controllers
         }
 
         // GET: OrderItem/Details/5
-        public async Task<IActionResult> Details(string locationName)
+        public async Task<IActionResult> Details(string locationName, string searchString)
         {
             var sessionValue = HttpContext.Session.GetInt32("CustomerId");
             var sessionUsername = HttpContext.Session.GetString("Username");
@@ -58,6 +58,12 @@ namespace StoreApp.WebApp.Controllers
                 var orders = await _repository.listOrdersAsync();
                 if (sessionUsername != "admin") {
                     orders.Where(o => o.Customer.CustomerId == customerId);
+                }
+                if (!String.IsNullOrWhiteSpace(locationName)) {
+                    orders = orders.Where(o => o.Location.LocationName == locationName);
+                }
+                if (!String.IsNullOrWhiteSpace(searchString)) {
+                    orders = orders.Where(o => o.Customer.Username.Contains(searchString));
                 }
                 List<OrderItemViewModel> orderItemViews = new List<OrderItemViewModel>();
                 

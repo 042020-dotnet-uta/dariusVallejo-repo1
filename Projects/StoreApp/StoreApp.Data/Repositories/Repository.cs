@@ -135,7 +135,8 @@ namespace StoreApp.Data {
                     Username = o.Customer.Username
                 },
                 Location = new BusinessLocation {
-                    LocationId = o.Location.LocationId
+                    LocationId = o.Location.LocationId,
+                    LocationName = o.Location.LocationName
                 }
             });
         }
