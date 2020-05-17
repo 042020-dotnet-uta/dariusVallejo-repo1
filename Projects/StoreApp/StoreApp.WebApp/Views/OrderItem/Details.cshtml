@@ -1,11 +1,25 @@
+@using StoreApp.BusinessLogic
 @model IEnumerable<StoreApp.WebApp.OrderItemViewModel>
 
 @{
     ViewData["Title"] = "Details";
 }
 
+@{
+}
+
 <h1>Details</h1>
 
+<form asp-controller="OrderItem" asp-action="Details" method="post">
+    <p>
+        <select>
+            @foreach (BusinessLocation location in ViewData["Locations"] as IEnumerable<BusinessLocation>) {
+                <option value=@location.LocationName>@location.LocationName</option>
+            }
+        </select>
+        
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>

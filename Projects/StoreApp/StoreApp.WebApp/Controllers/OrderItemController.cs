@@ -49,47 +49,40 @@ namespace StoreApp.WebApp.Controllers
         }
 
         // GET: OrderItem/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string locationName)
         {
             var sessionValue = HttpContext.Session.GetInt32("CustomerId");
+            var sessionUsername = HttpContext.Session.GetString("Username");
             if (sessionValue != null) {
                 int customerId = Convert.ToInt32(sessionValue);
-
-                // all order details for the current customer
-                if (id == null) {
-                    // get all the orders for the customer that has no order date
-                    var orders = await _repository.listOrdersByCustomerAsync(customerId);
-
-                    List<OrderItemViewModel> orderItemViews = new List<OrderItemViewModel>();
-                    
-                    // for each order item in each order, update the inventory for that item at that location
-                    foreach (var order in orders) {
-                        int orderId = order.OrderId;
-                        int locationId = order.Location.LocationId;
-                        var orderItems = await _repository.listOrderItemsAsync(customerId, orderId);
-                        
-                        foreach (var orderItem in orderItems) {
-                            int productId = orderItem.Product.ProductId;
-                            var product = await _repository.getProductAsync(productId, locationId);
-                            await _repository.updateInventoryAsync(locationId, orderItem);
-                            await _repository.submitOrderAsync(order);
-                            orderItemViews.Add(new OrderItemViewModel {
-                                OrderItemId = orderItem.OrderItemId,
-                                OrderId = orderId,
-                                ProductId = product.ProductId,
-                                ProductName = product.ProductName,
-                                ProductPrice = product.ProductPrice,
-                                Quantity = orderItem.Quantity
-                            });
-                        }
-                    }
-                    return View(orderItemViews);
-                } else {
-                    // TODO Specific order details
+                var orders = await _repository.listOrdersAsync();
+                if (sessionUsername != "admin") {
+                    orders.Where(o => o.Customer.CustomerId == customerId);
                 }
-
+                List<OrderItemViewModel> orderItemViews = new List<OrderItemViewModel>();
+                
+                foreach (var order in orders) {
+                    int orderId = order.OrderId;
+                    int locationId = order.Location.LocationId;
+                    var orderItems = await _repository.listOrderItemsAsync(customerId, orderId);
+                    
+                    foreach (var orderItem in orderItems) {
+                        int productId = orderItem.Product.ProductId;
+                        var product = await _repository.getProductAsync(productId, locationId);
+                        orderItemViews.Add(new OrderItemViewModel {
+                            OrderItemId = orderItem.OrderItemId,
+                            OrderId = orderId,
+                            ProductId = product.ProductId,
+                            ProductName = product.ProductName,
+                            ProductPrice = product.ProductPrice,
+                            Quantity = orderItem.Quantity
+                        });
+                    }
+                }
+                ViewData["Locations"] = await _repository.listLocationsAsync();
+                return View(orderItemViews);
             }
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         // TODO Add empty order check
@@ -145,8 +138,6 @@ namespace StoreApp.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(OrderItemViewModel orderItemView, int locationId)
         {
-            Console.WriteLine(orderItemView.LocationId);
-            Console.WriteLine(orderItemView.ProductId);
             var sessionValue = HttpContext.Session.GetInt32("CustomerId");
             if (ModelState.IsValid && sessionValue != null)
             {

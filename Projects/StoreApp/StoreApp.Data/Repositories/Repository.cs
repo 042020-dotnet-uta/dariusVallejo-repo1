@@ -102,7 +102,6 @@ namespace StoreApp.Data {
         }
 
         public async Task<IEnumerable<BusinessOrder>> listOrdersByCustomerAsync(int customerId) {
-            // var result = await _context.Orders.Where(o => o.Customer.CustomerId == customerId).ToListAsync();
             var orders = await _context.Orders.Include(o => o.Location).Include(o => o.OrderItems).Where(o => o.Customer.CustomerId == customerId).ToListAsync();
             return orders.Select(o => new BusinessOrder {
                 OrderId = o.OrderId,
@@ -113,18 +112,31 @@ namespace StoreApp.Data {
                     Quantity = oi.Quantity
                 }).ToHashSet(),
                 
-                // Customer
+                // Customer = null;
                 Location = new BusinessLocation {
                     LocationId = o.Location.LocationId
                 }
+            });
+        }
 
-                //     // Order = oi.Order,
-                //     Product = new BusinessProduct {
-                //         ProductId = oi.Product.ProductId,
-                //         ProductName = oi.Product.ProductName,
-                //         ProductPrice = oi.Product.ProductPrice
-                //     }
-                // }).ToHashSet()
+        public async Task<IEnumerable<BusinessOrder>> listOrdersAsync() {
+            var orders = await _context.Orders.Include(o => o.Customer).Include(o => o.Location).Include(o => o.OrderItems).ToListAsync();
+            return orders.Select(o => new BusinessOrder {
+                OrderId = o.OrderId,
+                // Total = 0,
+                OrderDate = o.OrderDate,
+                OrderItems = o.OrderItems.Select(oi => new BusinessOrderItem {
+                    OrderItemId = oi.OrderItemId,
+                    Quantity = oi.Quantity
+                }).ToHashSet(),
+                
+                Customer = new BusinessCustomer {
+                    CustomerId = o.Customer.CustomerId,
+                    Username = o.Customer.Username
+                },
+                Location = new BusinessLocation {
+                    LocationId = o.Location.LocationId
+                }
             });
         }
 
