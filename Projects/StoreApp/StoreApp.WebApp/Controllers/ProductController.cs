@@ -30,7 +30,8 @@ namespace StoreApp.WebApp.Controllers
                     ProductName = databaseProduct.ProductName,
                     ProductPrice = databaseProduct.ProductPrice,
                     LocationId = id,
-                    Quantity = databaseProduct.Quantity
+                    Quantity = 1,
+                    Stock = databaseProduct.Quantity
                 }
             );
             return View(productViews);
@@ -56,7 +57,8 @@ namespace StoreApp.WebApp.Controllers
                 ProductName = databaseProduct.ProductName,
                 ProductPrice = databaseProduct.ProductPrice,
                 LocationId = databaseProduct.LocationId,
-                Quantity = databaseProduct.Quantity
+                Quantity = 1,
+                Stock = databaseProduct.Quantity
             };
 
             return View(productView);

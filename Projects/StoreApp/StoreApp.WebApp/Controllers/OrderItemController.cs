@@ -151,10 +151,12 @@ namespace StoreApp.WebApp.Controllers
             if (ModelState.IsValid && sessionValue != null)
             {
                 int customerId = Convert.ToInt32(sessionValue);
+
                 // find all orders for a customer id
                 await _repository.createOrderAsync(customerId, locationId);
                 var orders = await _repository.listOrdersByCustomerAsync(customerId);
-                var order = orders.Where(o => o.Location.LocationId == locationId &&  o.OrderDate == null).FirstOrDefault();
+                var order = orders.Where(o => o.Location.LocationId == locationId &&  o.OrderDate == null)
+                .FirstOrDefault();
 
                 // add the order item to the order
                 BusinessOrderItem orderItem = new BusinessOrderItem {
@@ -167,7 +169,7 @@ namespace StoreApp.WebApp.Controllers
                     }
                 };
                 // update the order in the system
-                await _repository.updateOrderAsync(order, orderItem);
+                var inventory = await _repository.updateOrderAsync(order, orderItem);
                 return RedirectToAction(nameof(Index));
             }
             return View();
