@@ -36,6 +36,9 @@ namespace StoreApp.WebApp
             // Cookie stuff
             services.AddDistributedMemoryCache();
             services.AddSession();
+
+            // Session context accessor
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

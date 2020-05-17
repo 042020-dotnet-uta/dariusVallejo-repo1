@@ -55,9 +55,35 @@ namespace StoreApp.WebApp.Controllers
             if (sessionValue != null) {
                 int customerId = Convert.ToInt32(sessionValue);
 
+                // all order details for the current customer
                 if (id == null) {
-                    // (IEnumerable) orderItemViews = HttpContext.Current.Session["orderItemViews"];
-                    return View();
+                    // get all the orders for the customer that has no order date
+                    var orders = await _repository.listOrdersByCustomerAsync(customerId);
+
+                    List<OrderItemViewModel> orderItemViews = new List<OrderItemViewModel>();
+                    
+                    // for each order item in each order, update the inventory for that item at that location
+                    foreach (var order in orders) {
+                        int orderId = order.OrderId;
+                        int locationId = order.Location.LocationId;
+                        var orderItems = await _repository.listOrderItemsAsync(customerId, orderId);
+                        
+                        foreach (var orderItem in orderItems) {
+                            int productId = orderItem.Product.ProductId;
+                            var product = await _repository.getProductAsync(productId, locationId);
+                            await _repository.updateInventoryAsync(locationId, orderItem);
+                            await _repository.submitOrderAsync(order);
+                            orderItemViews.Add(new OrderItemViewModel {
+                                OrderItemId = orderItem.OrderItemId,
+                                OrderId = orderId,
+                                ProductId = product.ProductId,
+                                ProductName = product.ProductName,
+                                ProductPrice = product.ProductPrice,
+                                Quantity = orderItem.Quantity
+                            });
+                        }
+                    }
+                    return View(orderItemViews);
                 } else {
                     // TODO Specific order details
                 }
@@ -87,7 +113,6 @@ namespace StoreApp.WebApp.Controllers
                 foreach (var orderItem in orderItems) {
                     int productId = orderItem.Product.ProductId;
                     var product = await _repository.getProductAsync(productId, locationId);
-                    // await _repository.updateInventory(inventoryId, orderItem)?
                     await _repository.updateInventoryAsync(locationId, orderItem);
                     await _repository.submitOrderAsync(order);
                     orderItemViews.Add(new OrderItemViewModel {

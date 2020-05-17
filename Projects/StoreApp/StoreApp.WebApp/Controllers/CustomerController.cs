@@ -67,6 +67,7 @@ namespace StoreApp.WebApp.Controllers
             if (databaseCustomer != null)
             {
                 HttpContext.Session.SetInt32("CustomerId", databaseCustomer.CustomerId);
+                HttpContext.Session.SetString("Username", databaseCustomer.Username);
                 return RedirectToAction("Index", "Location");
             } else {
                 ModelState.AddModelError("Password", "Username or password is incorrect.");
