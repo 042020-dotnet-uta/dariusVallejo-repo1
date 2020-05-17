@@ -29,7 +29,8 @@ namespace StoreApp.WebApp.Controllers
             var sessionValue = HttpContext.Session.GetInt32("CustomerId");
             if (sessionValue != null) {
                 int customerId = Convert.ToInt32(sessionValue);
-                var orderItems = await _repository.listOrderItemsAsync(customerId, -1);
+                var orderItems = await _repository.listOrderItemsAsync(customerId);
+                orderItems = orderItems.Where(oi => oi.Order.OrderDate == null);
                 if (orderItems != null) {
                     var orderItemViews = orderItems.Select(oi => new OrderItemViewModel {
                         OrderId = oi.Order.OrderId,
@@ -56,6 +57,7 @@ namespace StoreApp.WebApp.Controllers
             if (sessionValue != null) {
                 int customerId = Convert.ToInt32(sessionValue);
                 var orders = await _repository.listOrdersAsync();
+                orders = orders.Where(o => o.OrderDate != null);
                 if (sessionUsername != "admin") {
                     orders.Where(o => o.Customer.CustomerId == customerId);
                 }
@@ -70,8 +72,8 @@ namespace StoreApp.WebApp.Controllers
                 foreach (var order in orders) {
                     int orderId = order.OrderId;
                     int locationId = order.Location.LocationId;
-                    var orderItems = await _repository.listOrderItemsAsync(customerId, orderId);
-                    
+                    var orderItems = await _repository.listOrderItemsAsync(customerId);
+                    orderItems = orderItems.Where(oi => oi.Order.OrderId == orderId);
                     foreach (var orderItem in orderItems) {
                         int productId = orderItem.Product.ProductId;
                         var product = await _repository.getProductAsync(productId, locationId);
@@ -107,7 +109,8 @@ namespace StoreApp.WebApp.Controllers
             foreach (var order in orders) {
                 int orderId = order.OrderId;
                 int locationId = order.Location.LocationId;
-                var orderItems = await _repository.listOrderItemsAsync(customerId, orderId);
+                var orderItems = await _repository.listOrderItemsAsync(customerId);
+                orderItems = orderItems.Where(oi => oi.Order.OrderId == orderId);
                 
                 foreach (var orderItem in orderItems) {
                     int productId = orderItem.Product.ProductId;
@@ -151,7 +154,7 @@ namespace StoreApp.WebApp.Controllers
                 // find all orders for a customer id
                 await _repository.createOrderAsync(customerId, locationId);
                 var orders = await _repository.listOrdersByCustomerAsync(customerId);
-                var order = orders.Where(o => o.OrderDate == null).FirstOrDefault();
+                var order = orders.Where(o => o.Location.LocationId == locationId &&  o.OrderDate == null).FirstOrDefault();
 
                 // add the order item to the order
                 BusinessOrderItem orderItem = new BusinessOrderItem {

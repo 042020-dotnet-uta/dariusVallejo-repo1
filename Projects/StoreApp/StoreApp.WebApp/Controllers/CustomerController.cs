@@ -75,6 +75,11 @@ namespace StoreApp.WebApp.Controllers
             }
         }
 
+        public async Task<IActionResult> Logout() {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
         // GET: Customer/Create
         public IActionResult Create()
         {

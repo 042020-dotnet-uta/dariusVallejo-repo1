@@ -181,21 +181,21 @@ namespace StoreApp.Data {
             return businessOrder;
         }
 
-        public async Task<IEnumerable<BusinessOrderItem>> listOrderItemsAsync(int customerId, int orderId) {
-            Order order;
-            if (orderId == -1) {
-                order = await _context.Orders.Include(o => o.OrderItems).ThenInclude(o => o.Product).Where(o => o.Customer.CustomerId == customerId && o.OrderDate == null).FirstOrDefaultAsync();
-            } else {
-                order = await _context.Orders.Include(o => o.OrderItems).ThenInclude(o=> o.Product).Where(o => o.OrderId == orderId).FirstOrDefaultAsync();
-            }
-            try {
-                var orderItems = order.OrderItems;
-                return orderItems.Select(oi => new BusinessOrderItem {
+        public async Task<IEnumerable<BusinessOrderItem>> listOrderItemsAsync(int customerId) {
+            var orderItems = await _context.OrderItems
+                                .Include(oi => oi.Order)
+                                .ThenInclude(o => o.Customer)
+                                .Include(oi => oi.Product)
+                                .Where(oi => oi.Order.Customer.CustomerId == customerId)
+                                .ToListAsync();
+
+            return orderItems.Select(oi => new BusinessOrderItem {
                 OrderItemId = oi.OrderItemId,
                 Quantity = oi.Quantity,
                 
                 Order = new BusinessOrder {
-                    OrderId = order.OrderId
+                    OrderId = oi.Order.OrderId,
+                    OrderDate = oi.Order.OrderDate
                 },
                 Product = new BusinessProduct {
                     ProductId = oi.Product.ProductId,
@@ -203,10 +203,6 @@ namespace StoreApp.Data {
                     ProductPrice = oi.Product.ProductPrice
                 }
             });
-            } catch (NullReferenceException exception) {
-                // TODO LOG EXCEPTION
-                return null;
-            }
         }
 
         public async Task<BusinessOrderItem> updateInventoryAsync(int locationId, BusinessOrderItem businessOrderItem) {

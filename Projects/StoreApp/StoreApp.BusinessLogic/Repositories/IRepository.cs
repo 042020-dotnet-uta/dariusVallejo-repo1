@@ -20,7 +20,7 @@ namespace StoreApp.BusinessLogic {
         Task<IEnumerable<BusinessOrder>> listOrdersByCustomerAsync(int customerId);
         Task<IEnumerable<BusinessOrder>> listOrdersAsync();
 
-        Task<IEnumerable<BusinessOrderItem>> listOrderItemsAsync(int customerid, int orderId);
+        Task<IEnumerable<BusinessOrderItem>> listOrderItemsAsync(int customerId);
         Task<BusinessOrderItem> updateInventoryAsync(int locationId, BusinessOrderItem orderItem);
     }
 }
