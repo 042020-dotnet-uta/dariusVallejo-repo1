@@ -30,9 +30,9 @@
         </dd>
     </dl>
 </div>
-<form asp-controller="OrderItem" asp-action="Create">
+<form asp-controller="OrderItem" asp-action="Create" asp-action="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    @if (@Model.Quantity > 0) {
+    @if (@Model.Stock > 0) {
         <div class="form-group">
             <label asp-for="Quantity" class="control-label">Quantity</label>
             @{ var stock = new SelectList(Enumerable.Range(1, @Model.Stock)); }

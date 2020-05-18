@@ -26,7 +26,19 @@ namespace StoreApp.WebApp.Controllers
         // GET: Customer
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customers.ToListAsync());
+            string username = HttpContext.Session.GetString("Username");
+            if (username == "admin") {
+                var customers = await _repository.listCustomersAsync();
+                customers = customers.Where(c => c.Username != username);
+                var customerViews = customers.Select(c => new CustomerViewModel {
+                    Username = c.Username,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    Email = c.Email
+                });
+                return View(customerViews);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Customer/Details/5

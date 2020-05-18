@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Hhvic3PnBm579r+EOgFuEgfDJt8MWYqwgBTsW8sXqnomFl8ruI055kN7hYLG6xz7aLwFZH2wiMIkoXBiSIfdTQ==",
+  "dgSpecHash": "pwcW+4j1eF/KSm61yoY0fe7a5iCQcw5dlTya2eRpW283jEmRcfumT72Ug3sbdWmjdLlnYF3X4M/ligc4FVv2mg==",
   "success": true,
   "projectFilePath": "C:\\Users\\dariu\\042020-dotnet-uta\\dariusVallejo-repo1\\Projects\\StoreApp\\StoreApp.Data\\StoreApp.Data.csproj",
   "expectedPackageFiles": [
@@ -12,6 +12,7 @@
     "C:\\Users\\dariu\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\3.1.0\\microsoft.entityframeworkcore.abstractions.3.1.0.nupkg.sha512",
     "C:\\Users\\dariu\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\3.1.0\\microsoft.entityframeworkcore.analyzers.3.1.0.nupkg.sha512",
     "C:\\Users\\dariu\\.nuget\\packages\\microsoft.entityframeworkcore.design\\3.1.0\\microsoft.entityframeworkcore.design.3.1.0.nupkg.sha512",
+    "C:\\Users\\dariu\\.nuget\\packages\\microsoft.entityframeworkcore.inmemory\\3.1.0\\microsoft.entityframeworkcore.inmemory.3.1.0.nupkg.sha512",
     "C:\\Users\\dariu\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\3.1.0\\microsoft.entityframeworkcore.relational.3.1.0.nupkg.sha512",
     "C:\\Users\\dariu\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\3.1.0\\microsoft.entityframeworkcore.sqlserver.3.1.0.nupkg.sha512",
     "C:\\Users\\dariu\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\3.1.0\\microsoft.extensions.caching.abstractions.3.1.0.nupkg.sha512",

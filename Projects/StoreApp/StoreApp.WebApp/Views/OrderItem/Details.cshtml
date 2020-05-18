@@ -1,5 +1,5 @@
 @using StoreApp.BusinessLogic
-@model IEnumerable<StoreApp.WebApp.OrderItemViewModel>
+@model StoreApp.WebApp.OrdeurItemViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -10,43 +10,37 @@
 
 <h1>Details</h1>
 
-<form asp-controller="OrderItem" asp-action="Details" method="post">
-    <p>
-        <select name="LocationName">
-            <option value="">All</option>
-            @foreach (BusinessLocation location in ViewData["Locations"] as IEnumerable<BusinessLocation>) {
-                <option value=@location.LocationName>@location.LocationName</option>
-            }
-        </select>
-        <input type="text" name="SearchString" />
-        <input type="submit" value="Search" />
-    </p>
-</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProductName)
+                @Html.DisplayNameFor(model => model.OrderItems.First().OrderItemId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductPrice)
+                @Html.DisplayNameFor(model => model.OrderItems.First().Product.ProductName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Quantity)
+                @Html.DisplayNameFor(model => model.OrderItems.First().Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderItems.First().Product.ProductPrice)
             </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.OrderItems) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
+                @Html.DisplayFor(modelItem => item.OrderItemId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProductPrice)
+                @Html.DisplayFor(modelItem => item.Product.ProductName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.ProductPrice)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.OrderItemId">Edit</a> |

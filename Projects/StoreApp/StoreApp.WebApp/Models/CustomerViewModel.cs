@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StoreApp.WebApp {
     public class CustomerViewModel {
+        public int CustomerId { get; set; }
+
         [Required]
         [DataType(DataType.Text)]
         public string Username { get; set; }

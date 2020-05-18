@@ -51,17 +51,15 @@ namespace StoreApp.Data {
             } return null;
         }
 
-        public async Task<BusinessCustomer> getCustomerByIdAsync(int customerId) {
-            Customer databaseCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == customerId);
-            if (databaseCustomer != null) {
-                return new BusinessCustomer {
-                    CustomerId = databaseCustomer.CustomerId,
-                    Username = databaseCustomer.Username,
-                    FirstName = databaseCustomer.FirstName,
-                    LastName = databaseCustomer.LastName,
-                    Email = databaseCustomer.Email
-                };
-            } return null;
+        public async Task<IEnumerable<BusinessCustomer>> listCustomersAsync() {
+            var customers = await _context.Customers.ToListAsync();
+            return customers.Select(c => new BusinessCustomer {
+                    CustomerId = c.CustomerId,
+                    Username = c.Username,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    Email = c.Email
+            });
         }
 
         public async Task<IEnumerable<BusinessLocation>> listLocationsAsync() {
@@ -72,26 +70,21 @@ namespace StoreApp.Data {
             });
         }
 
-        public async Task<IEnumerable<BusinessProduct>> listProductsAsync(int locationId) {
-            var businessProducts = await (from p in _context.Products
-                                                    join i in _context.Inventories
-                                                    on p.ProductId equals i.Product.ProductId
-                                                    select new {
-                                                        Product = p,
-                                                        Quantity = i.Quantity,
-                                                        LocationId = i.Location.LocationId
-                                                    }).Where(a => a.LocationId == locationId).ToListAsync();
-            return businessProducts.Select(bp => new BusinessProduct {
-                ProductId = bp.Product.ProductId,
-                ProductName = bp.Product.ProductName,
-                ProductPrice = bp.Product.ProductPrice,
-                LocationId = locationId,
-                Quantity = bp.Quantity,
+        public async Task<IEnumerable<BusinessProduct>> listInventoriesAsync() {
+            var inventories = await _context.Inventories.Include(i => i.Product)
+                                                        .Include(i => i.Location)
+                                                        .ToListAsync();
+            return inventories.Select(item => new BusinessProduct {
+                ProductId = item.Product.ProductId,
+                ProductName = item.Product.ProductName,
+                ProductPrice = item.Product.ProductPrice,
+                LocationId = item.Location.LocationId,
+                Quantity = item.Quantity,
             });
         }
 
-        public async Task<BusinessProduct> getProductAsync(int productId, int locationId) {
-            var result = await listProductsAsync(locationId);
+        public async Task<BusinessProduct> getInventoryAsync(int productId, int locationId) {
+            var result = await listInventoriesAsync();
             return result.Select(bp => new BusinessProduct {
                 ProductId = bp.ProductId,
                 ProductName = bp.ProductName,
@@ -101,29 +94,15 @@ namespace StoreApp.Data {
             }).Where(p => p.ProductId == productId && p.LocationId == p.LocationId).FirstOrDefault();
         }
 
-        public async Task<IEnumerable<BusinessOrder>> listOrdersByCustomerAsync(int customerId) {
-            var orders = await _context.Orders.Include(o => o.Location).Include(o => o.OrderItems).Where(o => o.Customer.CustomerId == customerId).ToListAsync();
-            return orders.Select(o => new BusinessOrder {
-                OrderId = o.OrderId,
-                // Total = 0,
-                OrderDate = o.OrderDate,
-                OrderItems = o.OrderItems.Select(oi => new BusinessOrderItem {
-                    OrderItemId = oi.OrderItemId,
-                    Quantity = oi.Quantity
-                }).ToHashSet(),
-                
-                // Customer = null;
-                Location = new BusinessLocation {
-                    LocationId = o.Location.LocationId
-                }
-            });
-        }
-
         public async Task<IEnumerable<BusinessOrder>> listOrdersAsync() {
-            var orders = await _context.Orders.Include(o => o.Customer).Include(o => o.Location).Include(o => o.OrderItems).ToListAsync();
+            var orders = await _context.Orders
+                                    .Include(o => o.Customer)
+                                    .Include(o => o.Location)
+                                    .Include(o => o.OrderItems)
+                                    .ToListAsync();
             return orders.Select(o => new BusinessOrder {
                 OrderId = o.OrderId,
-                // Total = 0,
+                Total = o.Total,
                 OrderDate = o.OrderDate,
                 OrderItems = o.OrderItems.Select(oi => new BusinessOrderItem {
                     OrderItemId = oi.OrderItemId,
@@ -132,7 +111,10 @@ namespace StoreApp.Data {
                 
                 Customer = new BusinessCustomer {
                     CustomerId = o.Customer.CustomerId,
-                    Username = o.Customer.Username
+                    Username = o.Customer.Username,
+                    FirstName = o.Customer.FirstName,
+                    LastName = o.Customer.LastName,
+                    Email = o.Customer.Email
                 },
                 Location = new BusinessLocation {
                     LocationId = o.Location.LocationId,
@@ -159,15 +141,32 @@ namespace StoreApp.Data {
         }
 
         public async Task<BusinessOrder> updateOrderAsync(BusinessOrder businessOrder, BusinessOrderItem businessOrderItem) {
+            
             Order order = await _context.Orders.Include(o => o.OrderItems).Where(o => o.OrderId == businessOrder.OrderId).FirstOrDefaultAsync();
-            OrderItem orderItem = new OrderItem {
-                Quantity = businessOrderItem.Quantity,
-                Order = order,
-                Product = await _context.Products.Where(p => p.ProductId == businessOrderItem.Product.ProductId).FirstOrDefaultAsync(),
-            };
-            order.OrderItems.Add(orderItem);
-            businessOrder.OrderItems.Add(businessOrderItem);
-            _context.Add(orderItem);
+            Inventory inventory = await _context.Inventories.Include(i => i.Product).Where(i => i.Product.ProductId == businessOrderItem.Product.ProductId).FirstOrDefaultAsync();
+            OrderItem orderItem;
+            // if (businessOrderItem.Quantity > inventory.Quantity) {
+            //     return null;
+            // }
+            if (businessOrderItem.OrderItemId == -1) {
+                orderItem = new OrderItem {
+                    Quantity = businessOrderItem.Quantity,
+                    Order = order,
+                    Product = await _context.Products.Where(p => p.ProductId == businessOrderItem.Product.ProductId).FirstOrDefaultAsync(),
+                };
+                order.OrderItems.Add(orderItem);
+                businessOrder.OrderItems.Add(businessOrderItem);
+                _context.Add(orderItem);
+            } else {
+                orderItem = await _context.OrderItems.Where(oi => oi.OrderItemId == businessOrderItem.OrderItemId).FirstOrDefaultAsync();
+
+                orderItem.Quantity += businessOrderItem.Quantity;
+                _context.Update(orderItem);
+            }
+            inventory.Quantity -= businessOrderItem.Quantity;
+            order.Total = businessOrder.Total;
+            _context.Update(order);
+            _context.Update(inventory);
             await _context.SaveChangesAsync();
             return businessOrder;
         }
@@ -181,12 +180,11 @@ namespace StoreApp.Data {
             return businessOrder;
         }
 
-        public async Task<IEnumerable<BusinessOrderItem>> listOrderItemsAsync(int customerId) {
+        public async Task<IEnumerable<BusinessOrderItem>> listOrderItemsAsync() {
             var orderItems = await _context.OrderItems
-                                .Include(oi => oi.Order)
-                                .ThenInclude(o => o.Customer)
+                                .Include(oi => oi.Order).ThenInclude(o => o.Customer)
+                                .Include(oi => oi.Order).ThenInclude(o => o.Location)
                                 .Include(oi => oi.Product)
-                                .Where(oi => oi.Order.Customer.CustomerId == customerId)
                                 .ToListAsync();
 
             return orderItems.Select(oi => new BusinessOrderItem {
@@ -195,7 +193,16 @@ namespace StoreApp.Data {
                 
                 Order = new BusinessOrder {
                     OrderId = oi.Order.OrderId,
-                    OrderDate = oi.Order.OrderDate
+                    OrderDate = oi.Order.OrderDate,
+
+                    Customer = new BusinessCustomer {
+                        CustomerId = oi.Order.Customer.CustomerId
+                    },
+
+                    Location = new BusinessLocation {
+                        LocationId = oi.Order.Location.LocationId,
+                        LocationName = oi.Order.Location.LocationName
+                    }
                 },
                 Product = new BusinessProduct {
                     ProductId = oi.Product.ProductId,

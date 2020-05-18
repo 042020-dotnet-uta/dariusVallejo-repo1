@@ -29,8 +29,8 @@ namespace StoreApp.WebApp.Controllers
             var sessionValue = HttpContext.Session.GetInt32("CustomerId");
             if (sessionValue != null) {
                 int customerId = Convert.ToInt32(sessionValue);
-                var orderItems = await _repository.listOrderItemsAsync(customerId);
-                orderItems = orderItems.Where(oi => oi.Order.OrderDate == null);
+                var orderItems = await _repository.listOrderItemsAsync();
+                orderItems = orderItems.Where(oi => oi.Order.Customer.CustomerId == customerId && oi.Order.OrderDate == null);
                 if (orderItems != null) {
                     var orderItemViews = orderItems.Select(oi => new OrderItemViewModel {
                         OrderId = oi.Order.OrderId,
@@ -50,47 +50,14 @@ namespace StoreApp.WebApp.Controllers
         }
 
         // GET: OrderItem/Details/5
-        public async Task<IActionResult> Details(string locationName, string searchString)
+        public async Task<IActionResult> Details(int id)
         {
-            var sessionValue = HttpContext.Session.GetInt32("CustomerId");
-            var sessionUsername = HttpContext.Session.GetString("Username");
-            if (sessionValue != null) {
-                int customerId = Convert.ToInt32(sessionValue);
-                var orders = await _repository.listOrdersAsync();
-                orders = orders.Where(o => o.OrderDate != null);
-                if (sessionUsername != "admin") {
-                    orders.Where(o => o.Customer.CustomerId == customerId);
-                }
-                if (!String.IsNullOrWhiteSpace(locationName)) {
-                    orders = orders.Where(o => o.Location.LocationName == locationName);
-                }
-                if (!String.IsNullOrWhiteSpace(searchString)) {
-                    orders = orders.Where(o => o.Customer.Username.Contains(searchString));
-                }
-                List<OrderItemViewModel> orderItemViews = new List<OrderItemViewModel>();
-                
-                foreach (var order in orders) {
-                    int orderId = order.OrderId;
-                    int locationId = order.Location.LocationId;
-                    var orderItems = await _repository.listOrderItemsAsync(customerId);
-                    orderItems = orderItems.Where(oi => oi.Order.OrderId == orderId);
-                    foreach (var orderItem in orderItems) {
-                        int productId = orderItem.Product.ProductId;
-                        var product = await _repository.getProductAsync(productId, locationId);
-                        orderItemViews.Add(new OrderItemViewModel {
-                            OrderItemId = orderItem.OrderItemId,
-                            OrderId = orderId,
-                            ProductId = product.ProductId,
-                            ProductName = product.ProductName,
-                            ProductPrice = product.ProductPrice,
-                            Quantity = orderItem.Quantity
-                        });
-                    }
-                }
-                ViewData["Locations"] = await _repository.listLocationsAsync();
-                return View(orderItemViews);
-            }
-            return RedirectToAction("Index", "Home");
+            var orderItems = await _repository.listOrderItemsAsync();
+            orderItems = orderItems.Where(oi => oi.Order.OrderId == id);
+            var orderItemView = new OrdeurItemViewModel {
+                OrderItems = orderItems
+            };
+            return View(orderItemView);
         }
 
         // TODO Add empty order check
@@ -109,13 +76,13 @@ namespace StoreApp.WebApp.Controllers
             foreach (var order in orders) {
                 int orderId = order.OrderId;
                 int locationId = order.Location.LocationId;
-                var orderItems = await _repository.listOrderItemsAsync(customerId);
+                var orderItems = await _repository.listOrderItemsAsync();
                 orderItems = orderItems.Where(oi => oi.Order.OrderId == orderId);
                 
                 foreach (var orderItem in orderItems) {
                     int productId = orderItem.Product.ProductId;
                     var product = await _repository.getProductAsync(productId, locationId);
-                    await _repository.updateInventoryAsync(locationId, orderItem);
+                    // await _repository.updateInventoryAsync(locationId, orderItem);
                     await _repository.submitOrderAsync(order);
                     orderItemViews.Add(new OrderItemViewModel {
                         OrderItemId = orderItem.OrderItemId,
@@ -152,14 +119,15 @@ namespace StoreApp.WebApp.Controllers
             {
                 int customerId = Convert.ToInt32(sessionValue);
 
-                // find all orders for a customer id
+                // get the order with no order date for this location
                 await _repository.createOrderAsync(customerId, locationId);
                 var orders = await _repository.listOrdersByCustomerAsync(customerId);
                 var order = orders.Where(o => o.Location.LocationId == locationId &&  o.OrderDate == null)
                 .FirstOrDefault();
 
-                // add the order item to the order
+                // Make a new order item for this product
                 BusinessOrderItem orderItem = new BusinessOrderItem {
+                    OrderItemId = -1,
                     Quantity = orderItemView.Quantity,
                     Order = order,
                     Product = new BusinessProduct {
@@ -168,12 +136,48 @@ namespace StoreApp.WebApp.Controllers
                         ProductPrice = orderItemView.ProductPrice
                     }
                 };
+
+                // if the order already has the incoming product id...
+                var existingOrderItems = await _repository.listOrderItemsAsync();
+                var existingOrderItem = existingOrderItems.Where(oi => oi.Order.OrderId == order.OrderId && oi.Order.Location.LocationId == locationId && oi.Product.ProductId == orderItemView.ProductId).FirstOrDefault();
+
+                if (existingOrderItem != null) {
+                    // orderItem.Quantity += existingOrderItem.Quantity;
+                    orderItem.OrderItemId = existingOrderItem.OrderItemId;
+                }
+
                 // update the order in the system
+                order.Total += orderItemView.Quantity * orderItemView.ProductPrice;
                 var inventory = await _repository.updateOrderAsync(order, orderItem);
-                return RedirectToAction(nameof(Index));
+                if (inventory == null) {
+                    ModelState.AddModelError("Quantity", "Please input valid quantity.");
+                } else {
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View();
             // return View(orderItem);
+        }
+
+        public async Task<IActionResult> List(string searchString, string locationName) {
+            var sessionValue = HttpContext.Session.GetInt32("CustomerId");
+            var username = HttpContext.Session.GetString("Username");
+            if (sessionValue != null) {
+                int customerId = Convert.ToInt32(sessionValue);
+                var locations = await _repository.listLocationsAsync();
+                var orders = await _repository.listOrdersAsync();
+                orders = orders.Where(o => o.OrderDate != null);
+                if (username != "admin") {
+                    orders = orders.Where(o => o.Customer.CustomerId == customerId);
+                }
+
+                var orderView = new OrderViewModel {
+                    Orders = orders
+                };
+                ViewData["Locations"] = await _repository.listLocationsAsync();
+                return View(orderView);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: OrderItem/Edit/5
