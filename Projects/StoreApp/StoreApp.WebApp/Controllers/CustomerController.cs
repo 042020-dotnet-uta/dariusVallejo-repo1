@@ -31,6 +31,7 @@ namespace StoreApp.WebApp.Controllers
                 var customers = await _repository.listCustomersAsync();
                 customers = customers.Where(c => c.Username != username);
                 var customerViews = customers.Select(c => new CustomerViewModel {
+                    CustomerId = c.CustomerId,
                     Username = c.Username,
                     FirstName = c.FirstName,
                     LastName = c.LastName,

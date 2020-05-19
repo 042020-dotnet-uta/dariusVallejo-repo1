@@ -159,15 +159,18 @@ namespace StoreApp.WebApp.Controllers
             // return View(orderItem);
         }
 
-        public async Task<IActionResult> List(string searchString, string locationName) {
+        public async Task<IActionResult> List(int? id, string searchString, string locationName) {
             var sessionValue = HttpContext.Session.GetInt32("CustomerId");
             var username = HttpContext.Session.GetString("Username");
             if (sessionValue != null) {
                 int customerId = Convert.ToInt32(sessionValue);
+                if (id != null) {
+                    customerId = id.Value;
+                }
                 var locations = await _repository.listLocationsAsync();
                 var orders = await _repository.listOrdersAsync();
                 orders = orders.Where(o => o.OrderDate != null);
-                if (username != "admin") {
+                if (username != "admin" || id != null) {
                     orders = orders.Where(o => o.Customer.CustomerId == customerId);
                 }
 
