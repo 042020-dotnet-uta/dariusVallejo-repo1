@@ -1,0 +1,29 @@
+Q1: Which of the following is a best practice for SOA?
+a) Vision and leadership
+b) Strategy and roadmap
+c) Policies and security
+d) All of the above (correct)
+
+Q2: What is a major cause of difficulty in testing SOA?
+a) Heterogeneity and complexity of solution
+b) Huge set of testing combinations
+c) Inclusion of services from different vendors
+d) All of the above (correct)
+
+Q3: The following is an example of a valid XML tag:
+a) <faultstring xsi:type="xsd:string">
+b) <link rel="stylesheet" href="styles.css">
+c) <note> (correct)
+d) <xs:element name="from" type="xs:string"/>
+
+Q4: What language is a WSDL file written in?
+a) XML (correct)
+b) HTML
+c) C#
+d) C
+
+Q5: When might you use a WSDL file?
+a) When forming HTTP responses to client requests
+b) To style how a webpage appears in the browser
+c) To set up how a web service communicates with a database
+d) When describing information required to connect to a web service (correct)
