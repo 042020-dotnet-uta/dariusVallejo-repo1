@@ -9,7 +9,7 @@
 }
 
 <h1>Orders</h1>
-<form asp-controller="OrderItem" asp-action="Details" method="post">
+<form asp-controller="OrderItem" asp-action="List" method="post">
     <p>
         <select name="LocationName">
             <option value="">All</option>
@@ -17,8 +17,7 @@
                 <option value=@location.LocationName>@location.LocationName</option>
             }
         </select>
-        <input type="text" name="SearchString" />
-        <input type="submit" value="Search" />
+        <input type="submit" value="Filter" />
     </p>
 </form>
 <table class="table">

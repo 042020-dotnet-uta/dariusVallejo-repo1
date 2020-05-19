@@ -33,7 +33,6 @@ namespace StoreApp.WebApp.Controllers
                 orderItems = orderItems.Where(oi => oi.Order.Customer.CustomerId == customerId && oi.Order.OrderDate == null);
                 if (orderItems != null) {
                     var orderItemViews = orderItems.Select(oi => new OrderItemViewModel {
-                        OrderId = oi.Order.OrderId,
                         ProductId = oi.Product.ProductId,
                         ProductName = oi.Product.ProductName,
                         ProductPrice = oi.Product.ProductPrice,
@@ -85,11 +84,9 @@ namespace StoreApp.WebApp.Controllers
                     // await _repository.updateInventoryAsync(locationId, orderItem);
                     await _repository.submitOrderAsync(order);
                     orderItemViews.Add(new OrderItemViewModel {
-                        OrderItemId = orderItem.OrderItemId,
-                        OrderId = orderId,
-                        ProductId = product.ProductId,
-                        ProductName = product.ProductName,
-                        ProductPrice = product.ProductPrice,
+                        ProductId = orderItem.Product.ProductId,
+                        ProductName = orderItem.Product.ProductName,
+                        ProductPrice = orderItem.Product.ProductPrice,
                         Quantity = orderItem.Quantity
                     });
                 }
@@ -112,8 +109,9 @@ namespace StoreApp.WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(OrderItemViewModel orderItemView, int locationId)
+        public async Task<IActionResult> Create(OrderItemViewModel orderItemView)
         {
+            int locationId = orderItemView.LocationId;
             var sessionValue = HttpContext.Session.GetInt32("CustomerId");
             if (ModelState.IsValid && sessionValue != null)
             {
@@ -133,9 +131,9 @@ namespace StoreApp.WebApp.Controllers
                     Product = new BusinessProduct {
                         ProductId = orderItemView.ProductId,
                         ProductName = orderItemView.ProductName,
-                        ProductPrice = orderItemView.ProductPrice
+                        ProductPrice = orderItemView.ProductPrice,
                     }
-                };
+                };         
 
                 // if the order already has the incoming product id...
                 var existingOrderItems = await _repository.listOrderItemsAsync();
@@ -159,7 +157,7 @@ namespace StoreApp.WebApp.Controllers
             // return View(orderItem);
         }
 
-        public async Task<IActionResult> List(int? id, string searchString, string locationName) {
+        public async Task<IActionResult> List(int? id, string locationName) {
             var sessionValue = HttpContext.Session.GetInt32("CustomerId");
             var username = HttpContext.Session.GetString("Username");
             if (sessionValue != null) {
@@ -167,11 +165,13 @@ namespace StoreApp.WebApp.Controllers
                 if (id != null) {
                     customerId = id.Value;
                 }
-                var locations = await _repository.listLocationsAsync();
                 var orders = await _repository.listOrdersAsync();
                 orders = orders.Where(o => o.OrderDate != null);
                 if (username != "admin" || id != null) {
                     orders = orders.Where(o => o.Customer.CustomerId == customerId);
+                }
+                if (!String.IsNullOrWhiteSpace(locationName)) {
+                    orders = orders.Where(o => o.Location.LocationName == locationName);
                 }
 
                 var orderView = new OrderViewModel {

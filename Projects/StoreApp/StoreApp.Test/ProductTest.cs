@@ -9,10 +9,7 @@ using System.Threading.Tasks;
 namespace StoreApp.Test
 {
     public class ProductTest
-    {
-        // Task<IEnumerable<BusinessProduct>> listProductsAsync(int locationId);
-        // Task<BusinessProduct> getProductAsync(int productId, int locationId);
-        
+    {        
         [Fact]
         public async Task TestListInventories() {
             var options = new DbContextOptionsBuilder<BusinessContext>()
@@ -43,8 +40,8 @@ namespace StoreApp.Test
 
                 var productsA = await repository.listInventoriesAsync();
                 var productsB = await repository.listInventoriesAsync();
-                productsA = productsA.Where(p => p.LocationId == 1);
-                productsB = productsB.Where(p => p.LocationId == 2);
+                productsA = productsA.Where(p => p.Location.LocationId == 1);
+                productsB = productsB.Where(p => p.Location.LocationId == 2);
 
                 Assert.Equal(2, productsA.Count());
                 Assert.Empty(productsB);
@@ -80,7 +77,7 @@ namespace StoreApp.Test
                 await bc.SaveChangesAsync();
 
                 var productsB = await repository.listInventoriesAsync();
-                productsB = productsB.Where(p => p.LocationId == 2);
+                productsB = productsB.Where(p => p.Location.LocationId == 2);
 
                 Assert.Empty(productsB);
             }

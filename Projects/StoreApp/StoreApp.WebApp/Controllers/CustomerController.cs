@@ -24,12 +24,16 @@ namespace StoreApp.WebApp.Controllers
         }
 
         // GET: Customer
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
             string username = HttpContext.Session.GetString("Username");
             if (username == "admin") {
                 var customers = await _repository.listCustomersAsync();
                 customers = customers.Where(c => c.Username != username);
+                if (!String.IsNullOrWhiteSpace(searchString)) {
+                    searchString = searchString.Trim().ToUpper();
+                    customers = customers.Where(c => new String(c.FirstName + c.LastName).ToUpper().Contains(searchString));
+                }
                 var customerViews = customers.Select(c => new CustomerViewModel {
                     CustomerId = c.CustomerId,
                     Username = c.Username,
@@ -71,21 +75,24 @@ namespace StoreApp.WebApp.Controllers
         [ValidateAntiForgeryToken] // ???
         public async Task<IActionResult> Login(CustomerViewModel customerView)
         {
-            var businessCustomer = new BusinessCustomer
-            {
-                Username = customerView.Username,
-                Password = customerView.Password
-            };
-            var databaseCustomer = await _repository.loginCustomerAsync(businessCustomer);
-            if (databaseCustomer != null)
-            {
-                HttpContext.Session.SetInt32("CustomerId", databaseCustomer.CustomerId);
-                HttpContext.Session.SetString("Username", databaseCustomer.Username);
-                return RedirectToAction("Index", "Location");
-            } else {
-                ModelState.AddModelError("Password", "Username or password is incorrect.");
-                return View();
-            }
+            var sessionValue = HttpContext.Session.GetInt32("CustomerId");
+            if (sessionValue == null) {
+                var businessCustomer = new BusinessCustomer
+                {
+                    Username = customerView.Username,
+                    Password = customerView.Password
+                };
+                var databaseCustomer = await _repository.loginCustomerAsync(businessCustomer);
+                if (databaseCustomer != null)
+                {
+                    HttpContext.Session.SetInt32("CustomerId", databaseCustomer.CustomerId);
+                    HttpContext.Session.SetString("Username", databaseCustomer.Username);
+                    return RedirectToAction("Index", "Home");
+                } else {
+                    ModelState.AddModelError("Password", "Username or password is incorrect.");
+                    return View();
+                }
+            } return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> Logout() {

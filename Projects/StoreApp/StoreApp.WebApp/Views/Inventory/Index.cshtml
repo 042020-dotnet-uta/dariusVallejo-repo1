@@ -1,0 +1,68 @@
+@using StoreApp.BusinessLogic;
+@model StoreApp.WebApp.InventoryViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-controller="Inventory" asp-action="Index" method="post">
+    <p>
+        <select name="LocationName">
+            <option value="">All</option>
+            @foreach (var location in ViewData["Locations"] as IEnumerable<BusinessLocation>) {
+                <option value=@location.LocationName>@location.LocationName</option>
+            }
+        </select>
+        <input type="text" name="SearchString" placeholder="Search by product name"/>
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Inventories.First().Product.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Inventories.First().Product.ProductPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Inventories.First().Location.LocationName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Inventories.First().Quantity)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Inventories) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.ProductPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location.LocationName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.InventoryId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.InventoryId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.InventoryId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

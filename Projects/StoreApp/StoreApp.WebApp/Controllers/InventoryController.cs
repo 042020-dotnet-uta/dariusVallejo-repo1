@@ -10,59 +10,52 @@ using StoreApp.BusinessLogic;
 
 namespace StoreApp.WebApp.Controllers
 {
-    public class ProductController : Controller
+    public class InventoryController : Controller
     {
         private readonly BusinessContext _context;
         private readonly IRepository _repository;
 
-        public ProductController(BusinessContext context, IRepository repository)
+        public InventoryController(BusinessContext context, IRepository repository)
         {
             _context = context;
             _repository = repository;
         }
 
         // POST: Product
-        public async Task<IActionResult> Index(int id) {
-            var databaseProducts = await _repository.listInventoriesAsync();
-            databaseProducts = databaseProducts.Where(p => p.LocationId == id);
-            var productViews = databaseProducts.Select(
-                databaseProduct => new ProductViewModel {
-                    ProductId = databaseProduct.ProductId,
-                    ProductName = databaseProduct.ProductName,
-                    ProductPrice = databaseProduct.ProductPrice,
-                    LocationId = id,
-                    Quantity = 1,
-                    Stock = databaseProduct.Quantity
-                }
-            );
-            return View(productViews);
+        public async Task<IActionResult> Index(string locationName, string searchString) {
+            var inventories = await _repository.listInventoriesAsync();
+            if (!String.IsNullOrWhiteSpace(locationName)) {
+                inventories = inventories.Where(i => i.Location.LocationName == locationName);
+            }
+            if (!String.IsNullOrWhiteSpace(searchString)) {
+                    searchString = searchString.Trim().ToUpper();
+                    inventories = inventories.Where(i => i.Product.ProductName.ToUpper().Contains(searchString));
+            }
+            var inventoryView = new InventoryViewModel {
+                Inventories = inventories
+            };
+            ViewData["Locations"] = await _repository.listLocationsAsync();
+            return View(inventoryView);
         }
 
         // GET: Product/Details/5
-        public async Task<IActionResult> Details(int productId, int locationId)
+        public async Task<IActionResult> Details(int id)
         {
-            // if (productId == null)
-            // {
-            //     return NotFound();
-            // }
+            var inventories = await _repository.listInventoriesAsync();
+            var inventory = inventories.Where(i => i.InventoryId == id).FirstOrDefault();
+            ViewData["Stock"] = inventory.Quantity;
+            return View(new OrderItemViewModel {
+                Product = inventory.Product,
+                // Location = inventory.Location,
+                ProductId = inventory.Product.ProductId,
+                ProductName = inventory.Product.ProductName,
+                ProductPrice = inventory.Product.ProductPrice,
 
-            // var product = await _context.Products
-            //     .FirstOrDefaultAsync(m => m.ProductId == id);
-            var databaseProduct = await _repository.getInventoryAsync(productId, locationId);
-            if (databaseProduct == null)
-            {
-                return NotFound();
-            }
-            ProductViewModel productView = new ProductViewModel {
-                ProductId = databaseProduct.ProductId,
-                ProductName = databaseProduct.ProductName,
-                ProductPrice = databaseProduct.ProductPrice,
-                LocationId = databaseProduct.LocationId,
+                LocationId = inventory.Location.LocationId,
+                LocationName = inventory.Location.LocationName,
+                
                 Quantity = 1,
-                Stock = databaseProduct.Quantity
-            };
-
-            return View(productView);
+            });
         }
 
         // GET: Product/Create

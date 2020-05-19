@@ -11,7 +11,7 @@ namespace StoreApp.BusinessLogic {
 
         Task<IEnumerable<BusinessLocation>> listLocationsAsync();
 
-        Task<IEnumerable<BusinessProduct>> listInventoriesAsync();
+        Task<IEnumerable<BusinessInventory>> listInventoriesAsync();
         Task<BusinessProduct> getInventoryAsync(int productId, int locationId);
 
         Task<BusinessOrder> createOrderAsync(int customerId, int locationId);

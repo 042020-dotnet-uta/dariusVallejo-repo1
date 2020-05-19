@@ -70,28 +70,37 @@ namespace StoreApp.Data {
             });
         }
 
-        public async Task<IEnumerable<BusinessProduct>> listInventoriesAsync() {
+        public async Task<IEnumerable<BusinessInventory>> listInventoriesAsync() {
             var inventories = await _context.Inventories.Include(i => i.Product)
                                                         .Include(i => i.Location)
                                                         .ToListAsync();
-            return inventories.Select(item => new BusinessProduct {
-                ProductId = item.Product.ProductId,
-                ProductName = item.Product.ProductName,
-                ProductPrice = item.Product.ProductPrice,
-                LocationId = item.Location.LocationId,
-                Quantity = item.Quantity,
+            return inventories.Select(i => new BusinessInventory {
+                InventoryId = i.InventoryId,
+                Quantity = i.Quantity,
+                Product = new BusinessProduct {
+                    ProductId = i.Product.ProductId,
+                    ProductName = i.Product.ProductName,
+                    ProductPrice = i.Product.ProductPrice
+                },
+                Location = new BusinessLocation {
+                    LocationId = i.Location.LocationId,
+                    LocationName = i.Location.LocationName
+                }
             });
         }
 
         public async Task<BusinessProduct> getInventoryAsync(int productId, int locationId) {
-            var result = await listInventoriesAsync();
-            return result.Select(bp => new BusinessProduct {
-                ProductId = bp.ProductId,
-                ProductName = bp.ProductName,
-                ProductPrice = bp.ProductPrice,
+            var inventory = await _context.Inventories.Include(i => i.Product)
+                                                        .Include(i => i.Location)
+                                                        .Where(i => i.Product.ProductId == productId && i.Location.LocationId == locationId)
+                                                        .FirstOrDefaultAsync();
+            return new BusinessProduct {
+                ProductId = inventory.Product.ProductId,
+                ProductName = inventory.Product.ProductName,
+                ProductPrice = inventory.Product.ProductPrice,
                 LocationId = locationId,
-                Quantity = bp.Quantity,
-            }).Where(p => p.ProductId == productId && p.LocationId == p.LocationId).FirstOrDefault();
+                Quantity = inventory.Quantity,
+            };
         }
 
         public async Task<IEnumerable<BusinessOrder>> listOrdersAsync() {
