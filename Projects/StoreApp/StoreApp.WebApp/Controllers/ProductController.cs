@@ -23,7 +23,8 @@ namespace StoreApp.WebApp.Controllers
 
         // POST: Product
         public async Task<IActionResult> Index(int id) {
-            var databaseProducts = await _repository.listProductsAsync(id);
+            var databaseProducts = await _repository.listInventoriesAsync();
+            databaseProducts = databaseProducts.Where(p => p.LocationId == id);
             var productViews = databaseProducts.Select(
                 databaseProduct => new ProductViewModel {
                     ProductId = databaseProduct.ProductId,
@@ -47,7 +48,7 @@ namespace StoreApp.WebApp.Controllers
 
             // var product = await _context.Products
             //     .FirstOrDefaultAsync(m => m.ProductId == id);
-            var databaseProduct = await _repository.getProductAsync(productId, locationId);
+            var databaseProduct = await _repository.getInventoryAsync(productId, locationId);
             if (databaseProduct == null)
             {
                 return NotFound();

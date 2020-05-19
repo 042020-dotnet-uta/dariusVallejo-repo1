@@ -155,3 +155,4 @@ C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\StoreApp.WebApp.genruntimeconfig.cache
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\OrderItem\Submit.cshtml.g.cs
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\OrderItem\List.cshtml.g.cs
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.InMemory.dll

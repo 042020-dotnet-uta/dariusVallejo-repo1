@@ -67,8 +67,8 @@ namespace StoreApp.WebApp.Controllers
             int customerId = Convert.ToInt32(sessionValue);
 
             // get all the orders for the customer that has no order date
-            var orders = await _repository.listOrdersByCustomerAsync(customerId);
-            orders = orders.Where(o => o.OrderDate == null);
+            var orders = await _repository.listOrdersAsync();
+            orders = orders.Where(o => o.Customer.CustomerId == customerId && o.OrderDate == null);
 
             List<OrderItemViewModel> orderItemViews = new List<OrderItemViewModel>();
             
@@ -81,7 +81,7 @@ namespace StoreApp.WebApp.Controllers
                 
                 foreach (var orderItem in orderItems) {
                     int productId = orderItem.Product.ProductId;
-                    var product = await _repository.getProductAsync(productId, locationId);
+                    var product = await _repository.getInventoryAsync(productId, locationId);
                     // await _repository.updateInventoryAsync(locationId, orderItem);
                     await _repository.submitOrderAsync(order);
                     orderItemViews.Add(new OrderItemViewModel {
@@ -121,8 +121,8 @@ namespace StoreApp.WebApp.Controllers
 
                 // get the order with no order date for this location
                 await _repository.createOrderAsync(customerId, locationId);
-                var orders = await _repository.listOrdersByCustomerAsync(customerId);
-                var order = orders.Where(o => o.Location.LocationId == locationId &&  o.OrderDate == null)
+                var orders = await _repository.listOrdersAsync();
+                var order = orders.Where(o => o.Customer.CustomerId == customerId && o.Location.LocationId == locationId &&  o.OrderDate == null)
                 .FirstOrDefault();
 
                 // Make a new order item for this product
