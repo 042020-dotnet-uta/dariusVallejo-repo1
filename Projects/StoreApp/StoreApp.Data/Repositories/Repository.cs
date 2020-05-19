@@ -127,27 +127,27 @@ namespace StoreApp.Data {
             Customer customer = await _context.Customers.Where(c => c.CustomerId == customerId).FirstOrDefaultAsync();
             Location location = await _context.Locations.Where(l => l.LocationId == locationId).FirstOrDefaultAsync();
             Order order = await _context.Orders.Where(o => o.Customer.CustomerId == customerId && o.Location.LocationId == locationId && o.OrderDate == null).FirstOrDefaultAsync();
-            if (order == null) {
+            if (customer != null && location != null && order == null) {
                 order = new Order {
-                OrderDate = null,
-                Customer = customer,
-                Location = location,
-                OrderItems = new List<OrderItem>()
-            };
+                    OrderDate = null,
+                    Customer = customer,
+                    Location = location,
+                    OrderItems = new List<OrderItem>()
+                };
                 _context.Add(order);
                 await _context.SaveChangesAsync();
-            } return new BusinessOrder();
-            
+                return new BusinessOrder();
+            } return null;
         }
 
         public async Task<BusinessOrder> updateOrderAsync(BusinessOrder businessOrder, BusinessOrderItem businessOrderItem) {
-            
-            Order order = await _context.Orders.Include(o => o.OrderItems).Where(o => o.OrderId == businessOrder.OrderId).FirstOrDefaultAsync();
-            Inventory inventory = await _context.Inventories.Include(i => i.Product).Where(i => i.Product.ProductId == businessOrderItem.Product.ProductId).FirstOrDefaultAsync();
+            Order order = await _context.Orders.Include(o => o.OrderItems)
+                                                .Where(o => o.OrderId == businessOrder.OrderId)
+                                                .FirstOrDefaultAsync();
+            Inventory inventory = await _context.Inventories.Include(i => i.Product)
+                                                            .Where(i => i.Product.ProductId == businessOrderItem.Product.ProductId)
+                                                            .FirstOrDefaultAsync();
             OrderItem orderItem;
-            // if (businessOrderItem.Quantity > inventory.Quantity) {
-            //     return null;
-            // }
             if (businessOrderItem.OrderItemId == -1) {
                 orderItem = new OrderItem {
                     Quantity = businessOrderItem.Quantity,
@@ -159,7 +159,6 @@ namespace StoreApp.Data {
                 _context.Add(orderItem);
             } else {
                 orderItem = await _context.OrderItems.Where(oi => oi.OrderItemId == businessOrderItem.OrderItemId).FirstOrDefaultAsync();
-
                 orderItem.Quantity += businessOrderItem.Quantity;
                 _context.Update(orderItem);
             }
@@ -171,13 +170,15 @@ namespace StoreApp.Data {
             return businessOrder;
         }
 
+        // TODO try catch, logging
         public async Task<BusinessOrder> submitOrderAsync(BusinessOrder businessOrder) {
-            // Order order = await _context.Orders.Include(o => o.OrderItems).Where(o => o.OrderId == businessOrder.OrderId).FirstOrDefaultAsync();
             Order order = await _context.Orders.Where(o => o.OrderId == businessOrder.OrderId).FirstOrDefaultAsync();
-            order.OrderDate = DateTime.Now.ToString();
-            _context.Update(order);
-            await _context.SaveChangesAsync();
-            return businessOrder;
+            if (order != null && order.OrderDate == null) {
+                order.OrderDate = DateTime.Now.ToString();
+                _context.Update(order);
+                await _context.SaveChangesAsync();
+                return new BusinessOrder();
+            } return null;
         }
 
         public async Task<IEnumerable<BusinessOrderItem>> listOrderItemsAsync() {
@@ -214,10 +215,13 @@ namespace StoreApp.Data {
 
         public async Task<BusinessOrderItem> updateInventoryAsync(int locationId, BusinessOrderItem businessOrderItem) {
             Inventory inventory = await _context.Inventories.Where(i => i.Location.LocationId == locationId && i.Product.ProductId == businessOrderItem.Product.ProductId).FirstOrDefaultAsync();
-            inventory.Quantity = inventory.Quantity - businessOrderItem.Quantity;
-            _context.Update(inventory);
-            await _context.SaveChangesAsync();
-            return businessOrderItem;
+            int update = inventory.Quantity - businessOrderItem.Quantity;
+            if (update >= 0) {
+                inventory.Quantity = update;
+                _context.Update(inventory);
+                await _context.SaveChangesAsync();
+                return businessOrderItem;
+            } return null;
         }
     }
 }

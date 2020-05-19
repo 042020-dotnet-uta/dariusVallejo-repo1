@@ -1,7 +1,3 @@
-C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\obj\Debug\netcoreapp3.1\StoreApp.Test.csprojAssemblyReference.cache
-C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\obj\Debug\netcoreapp3.1\StoreApp.Test.csproj.CoreCompileInputs.cache
-C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\obj\Debug\netcoreapp3.1\StoreApp.Test.AssemblyInfoInputs.cache
-C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\obj\Debug\netcoreapp3.1\StoreApp.Test.AssemblyInfo.cs
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\bin\Debug\netcoreapp3.1\testhost.dll
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\bin\Debug\netcoreapp3.1\testhost.exe
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\bin\Debug\netcoreapp3.1\xunit.runner.visualstudio.dotnetcore.testadapter.dll
@@ -127,6 +123,10 @@ C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\bin\Debug\netcoreapp3.1\StoreApp.Data.dll
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\bin\Debug\netcoreapp3.1\StoreApp.BusinessLogic.pdb
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\bin\Debug\netcoreapp3.1\StoreApp.Data.pdb
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\obj\Debug\netcoreapp3.1\StoreApp.Test.csprojAssemblyReference.cache
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\obj\Debug\netcoreapp3.1\StoreApp.Test.csproj.CoreCompileInputs.cache
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\obj\Debug\netcoreapp3.1\StoreApp.Test.AssemblyInfoInputs.cache
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\obj\Debug\netcoreapp3.1\StoreApp.Test.AssemblyInfo.cs
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\obj\Debug\netcoreapp3.1\StoreApp.Test.csproj.CopyComplete
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\obj\Debug\netcoreapp3.1\StoreApp.Test.dll
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.Test\obj\Debug\netcoreapp3.1\StoreApp.Test.pdb
