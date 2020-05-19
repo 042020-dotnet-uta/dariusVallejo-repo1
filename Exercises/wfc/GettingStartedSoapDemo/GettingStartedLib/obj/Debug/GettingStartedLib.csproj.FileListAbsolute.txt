@@ -1,0 +1,6 @@
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedLib\bin\Debug\GettingStartedLib.dll.config
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedLib\bin\Debug\GettingStartedLib.dll
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedLib\bin\Debug\GettingStartedLib.pdb
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedLib\obj\Debug\GettingStartedLib.csproj.CoreCompileInputs.cache
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedLib\obj\Debug\GettingStartedLib.dll
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedLib\obj\Debug\GettingStartedLib.pdb

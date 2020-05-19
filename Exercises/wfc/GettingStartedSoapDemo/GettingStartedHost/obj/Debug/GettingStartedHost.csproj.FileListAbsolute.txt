@@ -1,0 +1,11 @@
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedHost\bin\Debug\GettingStartedHost.exe.config
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedHost\bin\Debug\GettingStartedHost.exe
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedHost\bin\Debug\GettingStartedHost.pdb
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedHost\bin\Debug\GettingStartedLib.dll
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedHost\bin\Debug\GettingStartedLib.pdb
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedHost\bin\Debug\GettingStartedLib.dll.config
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedHost\obj\Debug\GettingStartedHost.csprojAssemblyReference.cache
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedHost\obj\Debug\GettingStartedHost.csproj.CoreCompileInputs.cache
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedHost\obj\Debug\GettingStartedHost.csproj.CopyComplete
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedHost\obj\Debug\GettingStartedHost.exe
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedHost\obj\Debug\GettingStartedHost.pdb

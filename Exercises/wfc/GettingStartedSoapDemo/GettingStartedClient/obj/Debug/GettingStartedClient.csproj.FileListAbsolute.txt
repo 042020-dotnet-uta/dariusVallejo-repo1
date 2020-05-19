@@ -1,0 +1,7 @@
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedClient\bin\Debug\GettingStartedClient.exe.config
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedClient\bin\Debug\GettingStartedClient.exe
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedClient\bin\Debug\GettingStartedClient.pdb
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedClient\obj\Debug\GettingStartedClient.csproj.CoreCompileInputs.cache
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedClient\obj\Debug\GettingStartedClient.exe
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedClient\obj\Debug\GettingStartedClient.pdb
+C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Exercises\wfc\GettingStartedSoapDemo\GettingStartedClient\obj\Debug\GettingStartedClient.csprojAssemblyReference.cache
