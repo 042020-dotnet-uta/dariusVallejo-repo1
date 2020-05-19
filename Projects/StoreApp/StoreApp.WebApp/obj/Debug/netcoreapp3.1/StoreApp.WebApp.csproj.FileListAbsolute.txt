@@ -117,9 +117,6 @@ C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\StoreApp.WebApp.TagHelpers.output.cache
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\StoreApp.WebApp.RazorCoreGenerate.cache
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Customer\Create.cshtml.g.cs
-C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Customer\Delete.cshtml.g.cs
-C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Customer\Details.cshtml.g.cs
-C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Customer\Edit.cshtml.g.cs
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Customer\Index.cshtml.g.cs
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Customer\Login.cshtml.g.cs
 C:\Users\dariu\042020-dotnet-uta\dariusVallejo-repo1\Projects\StoreApp\StoreApp.WebApp\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs

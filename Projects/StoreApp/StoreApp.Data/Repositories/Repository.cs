@@ -14,9 +14,8 @@ namespace StoreApp.Data {
         }
 
         public async Task<BusinessCustomer> createCustomerAsync(BusinessCustomer customer) {
-            // TODO Meaningful exceptions that don't break
             if (await _context.Customers.AnyAsync(c => c.Username == customer.Username)) {
-                  throw new InvalidOperationException("Already exists.");
+                  throw new InvalidOperationException("This username is already taken");
             }
             Customer newCustomer = new Customer {
                 Username = customer.Username,
@@ -31,11 +30,13 @@ namespace StoreApp.Data {
         }
 
         public async Task<BusinessCustomer> loginCustomerAsync(BusinessCustomer customer) {
-            Customer databaseCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Username == customer.Username && c.Password == customer.Password);
-            if (databaseCustomer != null) {
+            try {
+                Customer databaseCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Username == customer.Username && c.Password == customer.Password);
                 customer.CustomerId = databaseCustomer.CustomerId;
-                return customer;
-            } return null;
+            } catch (NullReferenceException exception) {
+                throw new NullReferenceException("Invalid username or password.");
+            }
+            return customer;
         }
 
         public async Task<BusinessCustomer> getCustomerByUsernameAsync(string username) {
@@ -149,6 +150,7 @@ namespace StoreApp.Data {
             } return null;
         }
 
+        // TODO Replace -1 check w/ try catch, logging
         public async Task<BusinessOrder> updateOrderAsync(BusinessOrder businessOrder, BusinessOrderItem businessOrderItem) {
             Order order = await _context.Orders.Include(o => o.OrderItems)
                                                 .Where(o => o.OrderId == businessOrder.OrderId)

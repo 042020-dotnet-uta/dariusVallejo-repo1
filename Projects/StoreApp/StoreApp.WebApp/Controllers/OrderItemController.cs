@@ -33,9 +33,7 @@ namespace StoreApp.WebApp.Controllers
                 orderItems = orderItems.Where(oi => oi.Order.Customer.CustomerId == customerId && oi.Order.OrderDate == null);
                 if (orderItems != null) {
                     var orderItemViews = orderItems.Select(oi => new OrderItemViewModel {
-                        ProductId = oi.Product.ProductId,
-                        ProductName = oi.Product.ProductName,
-                        ProductPrice = oi.Product.ProductPrice,
+                        Product = oi.Product,
                         Quantity = oi.Quantity
                     });
                     return View(orderItemViews);   
@@ -84,9 +82,7 @@ namespace StoreApp.WebApp.Controllers
                     // await _repository.updateInventoryAsync(locationId, orderItem);
                     await _repository.submitOrderAsync(order);
                     orderItemViews.Add(new OrderItemViewModel {
-                        ProductId = orderItem.Product.ProductId,
-                        ProductName = orderItem.Product.ProductName,
-                        ProductPrice = orderItem.Product.ProductPrice,
+                        Product = orderItem.Product,
                         Quantity = orderItem.Quantity
                     });
                 }
@@ -111,7 +107,7 @@ namespace StoreApp.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(OrderItemViewModel orderItemView)
         {
-            int locationId = orderItemView.LocationId;
+            int locationId = orderItemView.Location.LocationId;
             var sessionValue = HttpContext.Session.GetInt32("CustomerId");
             if (ModelState.IsValid && sessionValue != null)
             {
@@ -128,16 +124,12 @@ namespace StoreApp.WebApp.Controllers
                     OrderItemId = -1,
                     Quantity = orderItemView.Quantity,
                     Order = order,
-                    Product = new BusinessProduct {
-                        ProductId = orderItemView.ProductId,
-                        ProductName = orderItemView.ProductName,
-                        ProductPrice = orderItemView.ProductPrice,
-                    }
+                    Product = orderItemView.Product
                 };         
 
                 // if the order already has the incoming product id...
                 var existingOrderItems = await _repository.listOrderItemsAsync();
-                var existingOrderItem = existingOrderItems.Where(oi => oi.Order.OrderId == order.OrderId && oi.Order.Location.LocationId == locationId && oi.Product.ProductId == orderItemView.ProductId).FirstOrDefault();
+                var existingOrderItem = existingOrderItems.Where(oi => oi.Order.OrderId == order.OrderId && oi.Order.Location.LocationId == locationId && oi.Product.ProductId == orderItemView.Product.ProductId).FirstOrDefault();
 
                 if (existingOrderItem != null) {
                     // orderItem.Quantity += existingOrderItem.Quantity;
@@ -145,7 +137,7 @@ namespace StoreApp.WebApp.Controllers
                 }
 
                 // update the order in the system
-                order.Total += orderItemView.Quantity * orderItemView.ProductPrice;
+                order.Total += orderItemView.Quantity * orderItemView.Product.ProductPrice;
                 var inventory = await _repository.updateOrderAsync(order, orderItem);
                 if (inventory == null) {
                     ModelState.AddModelError("Quantity", "Please input valid quantity.");
