@@ -12,6 +12,9 @@ using Microsoft.Extensions.Logging;
 
 namespace StoreApp.WebApp.Controllers
 {
+    /// <summary>
+    /// Handles all order interaction between client and order repository
+    /// </summary>
     public class OrderItemController : Controller
     {
         private readonly ILogger _logger;
@@ -23,7 +26,10 @@ namespace StoreApp.WebApp.Controllers
             _repository = repository;
         }
 
-        // GET: OrderItem
+        /// <summary>
+        /// Displays the current cart contents for the current session's customer
+        /// </summary>
+        /// <returns>Customer's list of all the orders in the system that have NOT been submitted yet (cart)</returns>
         public async Task<IActionResult> Index()
         {
             try {
@@ -32,11 +38,13 @@ namespace StoreApp.WebApp.Controllers
                     int customerId = Convert.ToInt32(sessionValue);
                     var orderItems = await _repository.listOrderItemsAsync();
                     orderItems = orderItems.Where(oi => oi.Order.Customer.CustomerId == customerId && oi.Order.OrderDate == null);
+                    float total = orderItems.Sum(oi => oi.Product.ProductPrice * oi.Quantity);
                     if (orderItems != null) {
                         var orderItemViews = orderItems.Select(oi => new OrderItemViewModel {
                             Product = oi.Product,
                             Quantity = oi.Quantity
                         });
+                        ViewData["Total"] = total;
                         return View(orderItemViews);   
                     } else {
                         ModelState.AddModelError(string.Empty, "Your cart is empty.");
@@ -49,13 +57,17 @@ namespace StoreApp.WebApp.Controllers
             }
         }
 
-        // GET: OrderItem/Details/5
+        /// <summary>
+        /// Shows the details of an order
+        /// </summary>
+        /// <param name="id">The order id</param>
+        /// <returns>A list of the order items for an order</returns>
         public async Task<IActionResult> Details(int id)
         {
             try {
                 var orderItems = await _repository.listOrderItemsAsync();
                 orderItems = orderItems.Where(oi => oi.Order.OrderId == id);
-                var orderItemView = new OrdeurItemViewModel {
+                var orderItemView = new OrderViewModel {
                     OrderItems = orderItems
                 };
                 return View(orderItemView);
@@ -65,7 +77,10 @@ namespace StoreApp.WebApp.Controllers
             }
         }
 
-        // TODO Add empty order check
+        /// <summary>
+        /// Submits an order to the system
+        /// </summary>
+        /// <returns>A list of the order items belonging to the submitted order(s)</returns>
         public async Task<IActionResult> Submit()
         {
             try {       
@@ -77,11 +92,9 @@ namespace StoreApp.WebApp.Controllers
                 int customerId = Convert.ToInt32(sessionValue);
 
                 // get all the orders for the customer that has no order date
-                // var orders = await _repository.listOrdersAsync();
-                // orders = orders.Where(o => o.Customer.CustomerId == customerId && o.OrderDate == null);
                 var orderItems = await _repository.listOrderItemsAsync();
                 orderItems = orderItems.Where(o => o.Order.Customer.CustomerId == customerId && o.Order.OrderDate == null);
-
+                float total = orderItems.Sum(oi => oi.Product.ProductPrice * oi.Quantity);
                 if (orderItems.Count() == 0) {
                     ModelState.AddModelError(string.Empty, "Your cart is empty");
                     return RedirectToAction("Index");
@@ -101,6 +114,7 @@ namespace StoreApp.WebApp.Controllers
                 }
                 
                 // print the order items to the screen
+                ViewData["Total"] = total;
                 return View(orderItemViews);
             } catch (Exception exception) {
                 _logger.LogCritical(exception.Message);
@@ -108,15 +122,20 @@ namespace StoreApp.WebApp.Controllers
             }
         }
 
-        // GET: OrderItem/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        // /// <summary>
+        // /// 
+        // /// </summary>
+        // /// <returns></returns>
+        // public IActionResult Create()
+        // {
+        //     return View();
+        // }
 
-        // POST: OrderItem/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Adds an order item to a non-submitted order (Adds an item to cart)
+        /// </summary>
+        /// <param name="orderItemView">The order item to add to the order</param>
+        /// <returns>A redirect to a view of the updated cart</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(OrderItemViewModel orderItemView)
@@ -169,6 +188,12 @@ namespace StoreApp.WebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Shows all of the orders for a certain customer (optional) and location (optional)
+        /// </summary>
+        /// <param name="id">Optional customer id used in order search</param>
+        /// <param name="locationName">Optional location name used in order search</param>
+        /// <returns></returns>
         public async Task<IActionResult> List(int? id, string locationName) {
             try {
                 var sessionValue = HttpContext.Session.GetInt32("CustomerId");

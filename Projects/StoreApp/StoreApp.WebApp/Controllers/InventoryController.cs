@@ -10,6 +10,9 @@ using StoreApp.BusinessLogic;
 using Microsoft.Extensions.Logging;
 
 namespace StoreApp.WebApp.Controllers {
+    /// <summary>
+    /// Manages drawing inventory and interacting with inventory repository
+    /// </summary>
     public class InventoryController : Controller {
 
         private readonly ILogger _logger;
@@ -20,7 +23,12 @@ namespace StoreApp.WebApp.Controllers {
             _repository = repository;
         }
 
-        // POST: Product
+        /// <summary>
+        /// Lists all inventories matching searched location and product strings
+        /// </summary>
+        /// <param name="locationName">The name of the location to find products for</param>
+        /// <param name="searchString">The name of the products to find</param>
+        /// <returns>A visual list of all the inventories in the system</returns>
         public async Task<IActionResult> Index(string locationName, string searchString) {
             try {
                 var inventories = await _repository.listInventoriesAsync();
@@ -28,7 +36,7 @@ namespace StoreApp.WebApp.Controllers {
                     inventories = inventories.Where(i => i.Location.LocationName == locationName);
                 }
                 if (!String.IsNullOrWhiteSpace(searchString)) {
-                        searchString = searchString.Trim().ToUpper();
+                        searchString = searchString.Replace(" ", "").ToUpper();
                         inventories = inventories.Where(i => i.Product.ProductName.ToUpper().Contains(searchString));
                 }
                 var inventoryView = new InventoryViewModel {
@@ -42,7 +50,11 @@ namespace StoreApp.WebApp.Controllers {
             }
         }
 
-        // GET: Product/Details/5
+        /// <summary>
+        /// Lists the individual details of a line of inventory
+        /// </summary>
+        /// <param name="id">The id of the line of inventory to show details for</param>
+        /// <returns>A view of all the attributes of the inventory item</returns>
         public async Task<IActionResult> Details(int id) {
             try {
                 var inventories = await _repository.listInventoriesAsync();

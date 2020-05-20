@@ -1,17 +1,23 @@
 ﻿<!DOCTYPE html>
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - StoreApp.WebApp</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav style="position: fixed; width: 100%;" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="material-icons" style="color: blue">home</i>
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -19,31 +25,58 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Inventory" asp-action="Index">Browse</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Inventory" asp-action="Index">
+                                <i class="material-icons" style="color: blue">store</i>
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Customers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Create">Create Account</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Logout">Logout</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="OrderItem" asp-action="List">Orders</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="OrderItem" asp-action="Index">Cart</a>
-                        </li>
+                        @if (@HttpContextAccessor.HttpContext.Session.GetString("Username") == null) {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Login">
+                                    <i class="material-icons" style="color: blue">person_outline</i>
+                                </a>
+                            </li>
+                        }
+                        @if (@HttpContextAccessor.HttpContext.Session.GetString("Username") == null) {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Create">
+                                    <i class="material-icons" style="color: blue">person_add</i>
+                                </a>
+                            </li>
+                        }
+                        @if (@HttpContextAccessor.HttpContext.Session.GetString("Username") != null) {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Logout">
+                                    <i class="material-icons" style="color: blue">person</i>
+                                </a>
+                            </li>
+                        }
+                        @if (@HttpContextAccessor.HttpContext.Session.GetString("Username") != null) {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="OrderItem" asp-action="List">
+                                    <i class="material-icons" style="color: blue">local_shipping</i>
+                                </a>
+                            </li>
+                        }
+                        @if (@HttpContextAccessor.HttpContext.Session.GetString("Username") != null && @HttpContextAccessor.HttpContext.Session.GetString("Username") != "admin") {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="OrderItem" asp-action="Index">
+                                    <i class="material-icons" style="color: blue">local_grocery_store</i>
+                                </a>
+                            </li>
+                        }
+                        @if (@HttpContextAccessor.HttpContext.Session.GetString("Username") == "admin") {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">
+                                    <i class="material-icons" style="color: blue">people</i>
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+    <br><br><br>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -52,7 +85,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - StoreApp.WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

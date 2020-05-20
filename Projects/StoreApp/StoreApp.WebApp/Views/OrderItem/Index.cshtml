@@ -1,14 +1,10 @@
 @model IEnumerable<StoreApp.WebApp.OrderItemViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "cart";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h4>my cart</h4>
 <table class="table">
     <thead>
         <tr>
@@ -35,18 +31,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.OrderItemId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.OrderItemId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.OrderItemId">Delete</a>
-            </td>
         </tr>
 }
     </tbody>
 </table>
+<h6>total</h6>
+<p>@ViewData["Total"]</p>
 <form asp-controller="OrderItem" asp-action="Submit">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
-        <input type="submit" value="Submit Order" class="btn btn-primary" />
+        <input type="submit" value="complete order" class="btn btn-primary" />
     </div>
 </form>

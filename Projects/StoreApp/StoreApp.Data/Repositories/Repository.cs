@@ -6,6 +6,9 @@ using System.Linq;
 using StoreApp.BusinessLogic;
 
 namespace StoreApp.Data {
+    /// <summary>
+    /// Implementation of the repository interface, handles all actual reading / writing to the database
+    /// </summary>
     public class Repository : IRepository {
         private readonly BusinessContext _context;
 
@@ -13,6 +16,11 @@ namespace StoreApp.Data {
             _context = context;
         }
 
+        /// <summary>
+        /// Creates a new customer in the database if a matching one does not exist
+        /// </summary>
+        /// <param name="customer">A model of the customer that will be used to set the database values</param>
+        /// <returns>The same business customer if database creation was successful, false otherwise</returns>
         public async Task<BusinessCustomer> createCustomerAsync(BusinessCustomer customer) {
             if (await _context.Customers.AnyAsync(c => c.Username == customer.Username)) {
                   throw new InvalidOperationException("This username is already taken");
@@ -29,6 +37,11 @@ namespace StoreApp.Data {
             return customer;
         }
 
+        /// <summary>
+        /// Verifies that a customer's username and password match an entity in the database
+        /// </summary>
+        /// <param name="customer">The model with the username and password to check</param>
+        /// <returns>The same parameter customer object with validation successful, false otherwise</returns>
         public async Task<BusinessCustomer> loginCustomerAsync(BusinessCustomer customer) {
             Customer databaseCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Username == customer.Username && c.Password == customer.Password);
             if (databaseCustomer != null) {
@@ -37,6 +50,11 @@ namespace StoreApp.Data {
             } return null;
         }
 
+        /// <summary>
+        /// Searches the database for a customer with the requested username
+        /// </summary>
+        /// <param name="username">The username of the customer to search for</param>
+        /// <returns>A model of the customer entity if a match was found, false otherwise</returns>
         public async Task<BusinessCustomer> getCustomerByUsernameAsync(string username) {
             Customer databaseCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Username == username);
             if (databaseCustomer != null) {
@@ -50,6 +68,10 @@ namespace StoreApp.Data {
             } return null;
         }
 
+        /// <summary>
+        /// Lists all customers in the database
+        /// </summary>
+        /// <returns>A list of all of the customers currently in the context</returns>
         public async Task<IEnumerable<BusinessCustomer>> listCustomersAsync() {
             var customers = await _context.Customers.ToListAsync();
             return customers.Select(c => new BusinessCustomer {
@@ -61,6 +83,10 @@ namespace StoreApp.Data {
             });  
         }
 
+        /// <summary>
+        /// Lists all the locations in the context
+        /// </summary>
+        /// <returns>A list of all the locations currently in the context</returns>
         public async Task<IEnumerable<BusinessLocation>> listLocationsAsync() {
             List<Location> locations = await _context.Locations.ToListAsync();
             return locations.Select(databaseLocation => new BusinessLocation {
@@ -69,6 +95,10 @@ namespace StoreApp.Data {
             });
         }
 
+        /// <summary>
+        /// Lists all the inventories in the context
+        /// </summary>
+        /// <returns>A list of all the inventories currently in the context</returns>
         public async Task<IEnumerable<BusinessInventory>> listInventoriesAsync() {
             var inventories = await _context.Inventories.Include(i => i.Product)
                                                         .Include(i => i.Location)
@@ -88,6 +118,12 @@ namespace StoreApp.Data {
             });
         }
 
+        /// <summary>
+        /// Gets an inventory item for a requested product and location
+        /// </summary>
+        /// <param name="productId">The productId to search for</param>
+        /// <param name="locationId">The locationId to search for</param>
+        /// <returns>A model of a matching line of inventory from the current context</returns>
         public async Task<BusinessProduct> getInventoryAsync(int productId, int locationId) {
             var inventory = await _context.Inventories.Include(i => i.Product)
                                                         .Include(i => i.Location)
@@ -101,7 +137,11 @@ namespace StoreApp.Data {
                 Quantity = inventory.Quantity,
             };
         }
-
+        
+        /// <summary>
+        /// Lists all the orders in the context
+        /// </summary>
+        /// <returns>A list of all the orders in the current context</returns>
         public async Task<IEnumerable<BusinessOrder>> listOrdersAsync() {
             var orders = await _context.Orders
                                     .Include(o => o.Customer)
@@ -130,7 +170,13 @@ namespace StoreApp.Data {
                 }
             });
         }
-
+        
+        /// <summary>
+        /// Creates a new empty order for a customer for a particular location
+        /// </summary>
+        /// <param name="customerId">The customer to created the order for</param>
+        /// <param name="locationId">The location for the order</param>
+        /// <returns>A representation of the order created in the database if successful, false otherwise</returns>
         public async Task<BusinessOrder> createOrderAsync(int customerId, int locationId) {
             Customer customer = await _context.Customers.Where(c => c.CustomerId == customerId).FirstOrDefaultAsync();
             Location location = await _context.Locations.Where(l => l.LocationId == locationId).FirstOrDefaultAsync();
@@ -148,7 +194,12 @@ namespace StoreApp.Data {
             } return null;
         }
 
-        // TODO Replace -1 check w/ try catch, logging
+        /// <summary>
+        /// Updates the context inventory with information from an incoming order item
+        /// </summary>
+        /// <param name="businessOrder">The order that contains the order item</param>
+        /// <param name="businessOrderItem">The order item to be added to the order</param>
+        /// <returns>A representation of the updated order</returns>
         public async Task<BusinessOrder> updateOrderAsync(BusinessOrder businessOrder, BusinessOrderItem businessOrderItem) {
             Order order = await _context.Orders.Include(o => o.OrderItems)
                                                 .Where(o => o.OrderId == businessOrder.OrderId)
@@ -179,7 +230,11 @@ namespace StoreApp.Data {
             return businessOrder;
         }
 
-        // TODO try catch, logging
+        /// <summary>
+        /// Submits an order to the system
+        /// </summary>
+        /// <param name="businessOrder">The order that was submitted to the context</param>
+        /// <returns></returns>
         public async Task<BusinessOrder> submitOrderAsync(BusinessOrder businessOrder) {
             Order order = await _context.Orders.Where(o => o.OrderId == businessOrder.OrderId).FirstOrDefaultAsync();
             if (order != null && order.OrderDate == null) {
@@ -191,6 +246,10 @@ namespace StoreApp.Data {
             } return null;
         }
 
+        /// <summary>
+        /// Lists all of the order items in the context
+        /// </summary>
+        /// <returns>A list of all the order items in the current context</returns>
         public async Task<IEnumerable<BusinessOrderItem>> listOrderItemsAsync() {
             var orderItems = await _context.OrderItems
                                 .Include(oi => oi.Order).ThenInclude(o => o.Customer)
@@ -225,6 +284,12 @@ namespace StoreApp.Data {
             });
         }
 
+        /// <summary>
+        /// Updates an inventory with information from an order item
+        /// </summary>
+        /// <param name="locationId">The location of the product to update information for</param>
+        /// <param name="businessOrderItem">The order item with update information</param>
+        /// <returns>The same order item if the inventory quantity was updated successfully, false otherwise</returns>
         public async Task<BusinessOrderItem> updateInventoryAsync(int locationId, BusinessOrderItem businessOrderItem) {
             Inventory inventory = await _context.Inventories.Where(i => i.Location.LocationId == locationId && i.Product.ProductId == businessOrderItem.Product.ProductId).FirstOrDefaultAsync();
             int update = inventory.Quantity - businessOrderItem.Quantity;

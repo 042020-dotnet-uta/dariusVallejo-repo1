@@ -11,6 +11,9 @@ using Microsoft.Extensions.Logging;
 
 namespace StoreApp.WebApp.Controllers
 {
+    /// <summary>
+    /// Manages interactions between the customer specific views and the database repository
+    /// </summary>
     public class CustomerController : Controller
     {
         private readonly ILogger _logger;
@@ -22,7 +25,11 @@ namespace StoreApp.WebApp.Controllers
             _repository = repository;
         }
 
-        // GET: Customer
+        /// <summary>
+        /// Lists all of the customers currently in the system with names matching the search string
+        /// </summary>
+        /// <param name="searchString">The name to search for, case-insensitive</param>
+        /// <returns>A list of all the customers matching the search string</returns>
         public async Task<IActionResult> Index(string searchString)
         {
             string username = HttpContext.Session.GetString("Username");
@@ -30,7 +37,7 @@ namespace StoreApp.WebApp.Controllers
                 var customers = await _repository.listCustomersAsync();
                 customers = customers.Where(c => c.Username != username);
                 if (!String.IsNullOrWhiteSpace(searchString)) {
-                    searchString = searchString.Trim().ToUpper();
+                    searchString = searchString.Replace(" ", "").ToUpper();
                     customers = customers.Where(c => new String(c.FirstName + c.LastName).ToUpper().Contains(searchString));
                 }
                 var customerViews = customers.Select(c => new CustomerViewModel {
@@ -47,7 +54,10 @@ namespace StoreApp.WebApp.Controllers
             }
         }
 
-        // GET: Customer/Login
+        /// <summary>
+        /// Initial login get, redirect switch
+        /// </summary>
+        /// <returns>A view to the home controller if the client is logged in, otherwise to the post login page</returns>
         public IActionResult Login()
         {
             if (HttpContext.Session.GetInt32("CustomerId") != null) {
@@ -55,7 +65,11 @@ namespace StoreApp.WebApp.Controllers
             } return View();
         }
 
-        // POST: Customer/Login
+        /// <summary>
+        /// Logs a client in to the system
+        /// </summary>
+        /// <param name="customerView">Customer view containing login information</param>
+        /// <returns>A redirect to the home page if successful, invalid error message if mismatch</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(CustomerViewModel customerView)
@@ -80,6 +94,10 @@ namespace StoreApp.WebApp.Controllers
             } return RedirectToAction("Index", "Home");
         }
 
+        /// <summary>
+        /// Ends the current client session if there is one
+        /// </summary>
+        /// <returns>A redirect to the home page</returns>
         public IActionResult Logout() {
             var username = HttpContext.Session.GetString("Username");
             if (username != null) {
@@ -89,16 +107,21 @@ namespace StoreApp.WebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // GET: Customer/Create
+        /// <summary>
+        /// Get for customer creation
+        /// </summary>
+        /// <returns>Redirects to the home page if the customer is logged in, to the create customer page otherwise</returns>
         public IActionResult Create() {
             if (HttpContext.Session.GetInt32("CustomerId") != null) {
                 return RedirectToAction("Index", "Home");
             } return View();
         }
 
-        // POST: Customer/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Creates a customer account for the client
+        /// </summary>
+        /// <param name="customerView">Customer model containing account creation information</param>
+        /// <returns>A redirect to the login page if creation successful, re-prompt if input invalid</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CustomerViewModel customerView) {

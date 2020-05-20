@@ -1,18 +1,14 @@
 @model IEnumerable<StoreApp.WebApp.CustomerViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "customers";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h4>customers</h4>
 <form asp-controller="Customer" asp-action="Index">
     <p>
-        <input type="text" name="SearchString" placeholder="Search by customer name"/>
-        <input type="submit" value="Search" />
+        <input type="text" name="SearchString" placeholder="search by customer name"/>
+        <input type="submit" value="search" />
     </p>
 </form>
 <table class="table">
@@ -49,9 +45,9 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CustomerId">Edit</a> |
-                <a asp-controller="OrderItem" asp-action="List" asp-route-id="@item.CustomerId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CustomerId">Delete</a>
+                <a asp-controller="OrderItem" asp-action="List" asp-route-id="@item.CustomerId">
+                    <i class="material-icons">more_horiz</i>
+                </a>
             </td>
         </tr>
 }

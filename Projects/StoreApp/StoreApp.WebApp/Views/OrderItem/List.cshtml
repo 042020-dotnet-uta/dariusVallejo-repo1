@@ -2,22 +2,22 @@
 @model StoreApp.WebApp.OrderViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "orders";
 }
 
 @{
 }
 
-<h1>Orders</h1>
+<h4>order history</h4>
 <form asp-controller="OrderItem" asp-action="List" method="post">
     <p>
         <select name="LocationName">
-            <option value="">All</option>
+            <option value="">all locations</option>
             @foreach (BusinessLocation location in ViewData["Locations"] as IEnumerable<BusinessLocation>) {
                 <option value=@location.LocationName>@location.LocationName</option>
             }
         </select>
-        <input type="submit" value="Filter" />
+        <input type="submit" value="filter" />
     </p>
 </form>
 <table class="table">
@@ -27,7 +27,7 @@
                 @Html.DisplayNameFor(model => model.Orders.First().OrderId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Orders.First().Customer.Email)
+                @Html.DisplayNameFor(model => model.Orders.First().Customer.Username)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Orders.First().Location.LocationName)
@@ -47,7 +47,7 @@
                 @Html.DisplayFor(modelItem => item.OrderId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Customer.Email)
+                @Html.DisplayFor(modelItem => item.Customer.Username)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Location.LocationName)
@@ -59,14 +59,11 @@
                 @Html.DisplayFor(modelItem => item.OrderDate)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.OrderId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.OrderId">
+                    <i class="material-icons">more_horiz</i>
+                </a>
             </td>
         </tr>
 }
     </tbody>
 </table>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>

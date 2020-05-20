@@ -4,8 +4,7 @@
     ViewData["Title"] = "Submit";
 }
 
-<h1>Details</h1>
-
+<h4>order complete!</h4>
 <table class="table">
     <thead>
         <tr>
@@ -32,15 +31,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.OrderItemId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.OrderItemId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.OrderItemId">Delete</a>
-            </td>
         </tr>
 }
     </tbody>
 </table>
+<h6>total</h6>
+<p>@ViewData["Total"]</p>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Home" asp-action="Index">
+        <i class="material-icons">subdirectory_arrow_left</i>
+    </a>
 </div>

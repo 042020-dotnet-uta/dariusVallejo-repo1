@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace StoreApp.BusinessLogic {
+    /// <summary>
+    /// Interface for dependency injection of repository instantiation
+    /// </summary>
     public interface IRepository {
 
         Task<BusinessCustomer> createCustomerAsync(BusinessCustomer customer);
