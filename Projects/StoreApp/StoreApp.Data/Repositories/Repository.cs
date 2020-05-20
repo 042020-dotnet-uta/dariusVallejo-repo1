@@ -30,13 +30,11 @@ namespace StoreApp.Data {
         }
 
         public async Task<BusinessCustomer> loginCustomerAsync(BusinessCustomer customer) {
-            try {
-                Customer databaseCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Username == customer.Username && c.Password == customer.Password);
+            Customer databaseCustomer = await _context.Customers.FirstOrDefaultAsync(c => c.Username == customer.Username && c.Password == customer.Password);
+            if (databaseCustomer != null) {
                 customer.CustomerId = databaseCustomer.CustomerId;
-            } catch (NullReferenceException exception) {
-                throw new NullReferenceException("Invalid username or password.");
-            }
-            return customer;
+                return customer;
+            } return null;
         }
 
         public async Task<BusinessCustomer> getCustomerByUsernameAsync(string username) {
@@ -60,7 +58,7 @@ namespace StoreApp.Data {
                     FirstName = c.FirstName,
                     LastName = c.LastName,
                     Email = c.Email
-            });
+            });  
         }
 
         public async Task<IEnumerable<BusinessLocation>> listLocationsAsync() {
@@ -188,7 +186,8 @@ namespace StoreApp.Data {
                 order.OrderDate = DateTime.Now.ToString();
                 _context.Update(order);
                 await _context.SaveChangesAsync();
-                return new BusinessOrder();
+                businessOrder.OrderDate = order.OrderDate;
+                return businessOrder; 
             } return null;
         }
 
@@ -206,9 +205,11 @@ namespace StoreApp.Data {
                 Order = new BusinessOrder {
                     OrderId = oi.Order.OrderId,
                     OrderDate = oi.Order.OrderDate,
+                    Total = oi.Order.Total,
 
                     Customer = new BusinessCustomer {
-                        CustomerId = oi.Order.Customer.CustomerId
+                        CustomerId = oi.Order.Customer.CustomerId,
+                        Username = oi.Order.Customer.Username
                     },
 
                     Location = new BusinessLocation {

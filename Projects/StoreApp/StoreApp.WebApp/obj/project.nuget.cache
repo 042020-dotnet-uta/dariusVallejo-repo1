@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "IC/aFuMNbLFZLfhhjr9cTqpaSRmzun8zren+lmAFch7RnM0dJa+Bx0+WOW06XjoYQutvY7BlKwxDfC5bgALwGg==",
+  "dgSpecHash": "t1IGdgZTKUNl2bh/A+6pvyvvq5O3N87JXB6TAMeHI/6qaZD5fWdkt2s5v03FBCnHd0qTN7MEZNe6RSlkEJV6dg==",
   "success": true,
   "projectFilePath": "C:\\Users\\dariu\\042020-dotnet-uta\\dariusVallejo-repo1\\Projects\\StoreApp\\StoreApp.WebApp\\StoreApp.WebApp.csproj",
   "expectedPackageFiles": [
@@ -168,7 +168,8 @@
     "C:\\Users\\dariu\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\dariu\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\dariu\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\dariu\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
+    "C:\\Users\\dariu\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
+    "C:\\Users\\dariu\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
   ],
   "logs": []
 }

@@ -9,10 +9,6 @@ using System.Collections.Generic;
 
 namespace StoreApp.Test
 {
-    // Task<BusinessOrder> createOrderAsync(int customerId, int locationId);
-    // Task<BusinessOrder> updateOrderAsync(BusinessOrder order, BusinessOrderItem orderItem);
-    // Task<BusinessOrder> submitOrderAsync(BusinessOrder order);
-    // Task<IEnumerable<BusinessOrder>> listOrdersAsync();
     public class OrderTest
     {   
         [Fact]

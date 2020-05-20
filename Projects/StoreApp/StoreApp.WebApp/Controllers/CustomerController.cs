@@ -13,8 +13,8 @@ namespace StoreApp.WebApp.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly IRepository _repository;
         private readonly ILogger _logger;
+        private readonly IRepository _repository;
 
         public CustomerController(ILogger<CustomerController> logger, IRepository repository)
         {
@@ -67,17 +67,16 @@ namespace StoreApp.WebApp.Controllers
                     Username = customerView.Username,
                     Password = customerView.Password
                 };
-                try {
-                    var databaseCustomer = await _repository.loginCustomerAsync(businessCustomer);
+                var databaseCustomer = await _repository.loginCustomerAsync(businessCustomer);
+                if (databaseCustomer != null) {
                     HttpContext.Session.SetInt32("CustomerId", databaseCustomer.CustomerId);
                     HttpContext.Session.SetString("Username", databaseCustomer.Username);
                     _logger.LogInformation("Session created for {0}", customerView.Username);
                     return RedirectToAction("Index", "Home");
-                } catch (Exception exception) {
-                    ModelState.AddModelError("Password", exception.Message);
-                    _logger.LogWarning(exception.Message);
-                    return View();
                 }
+                ModelState.AddModelError("Password", "Invalid username or password.");
+                _logger.LogWarning("Invalid username or password.");
+                return View();
             } return RedirectToAction("Index", "Home");
         }
 
