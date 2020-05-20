@@ -44,6 +44,7 @@ namespace StoreApp.WebApp.Controllers
                             Product = oi.Product,
                             Quantity = oi.Quantity
                         });
+                        total = (float) Math.Truncate(total * 100) / 100;
                         ViewData["Total"] = total;
                         return View(orderItemViews);   
                     } else {
@@ -101,7 +102,6 @@ namespace StoreApp.WebApp.Controllers
                 }
 
                 List<OrderItemViewModel> orderItemViews = new List<OrderItemViewModel>();
-                
                 // for each order item in each order, update the inventory for that item at that location   
                 foreach (var orderItem in orderItems) {
                     var order = orderItem.Order;
@@ -114,6 +114,7 @@ namespace StoreApp.WebApp.Controllers
                 }
                 
                 // print the order items to the screen
+                total = (float) Math.Truncate(total * 100) / 100;
                 ViewData["Total"] = total;
                 return View(orderItemViews);
             } catch (Exception exception) {
@@ -168,6 +169,9 @@ namespace StoreApp.WebApp.Controllers
                     if (existingOrderItem != null) {
                         // orderItem.Quantity += existingOrderItem.Quantity;
                         orderItem.OrderItemId = existingOrderItem.OrderItemId;
+                        if (existingOrderItem.Quantity + orderItem.Quantity > 10) {
+                            orderItem.Quantity = 0;
+                        }
                     }
 
                     // update the order in the system
