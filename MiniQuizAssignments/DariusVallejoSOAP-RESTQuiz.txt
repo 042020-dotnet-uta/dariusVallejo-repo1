@@ -1,0 +1,72 @@
+SOAP:
+Q1: Which of the following is an example of a SOAP message syntax?
+a) <soap:Header></soap:Header> (correct)
+b) { "name":"something" }
+c) <heading>Reminder</heading>
+d) <button type="button" onclock="loadDoc()">Change Content</button>
+
+Q2: When would you choose SOAP over REST?
+a) When your application requires formal contracts between the API and the consumer
+b) When your application needs to have access to built-in stateful operations
+c) When your application needs to support and use legacy systems
+d) All of the above (correct)
+
+Q3: Which XML formatted document describes the operations and interaction instructions for a web service?
+a) SOAP - Envelope
+b) XMLHttpRequest
+c) Web Service Description Language (correct)
+d) REST Response Header
+
+Q4: Which is an attribute of SOAP?
+a) mustComprehend
+b) auteur
+c) encodingSemantic
+d) None of the above (correct)
+
+Q5: What is a key difference between SOAP and REST?
+a) Both are protocols
+b) Both work with plain text, XML, HTML and JSON
+c) Both use the same amount of bandwidth
+d) SOAP cannot make use of REST whereas REST can make use of SOAP (correct)
+
+REST:
+Q1: Which of the following is optional in REST?
+a) Layered System
+b) Code on Demand (correct)
+c) Uniform Interface
+d) Client-Server
+
+Q2: Which of the following is optional in REST?
+a) Leaving the swamp of POX
+b) Making resources accessible via URI
+c) Using HTTP verbs to access / modify resources
+d) Implementing HATEOAS (correct)
+
+Q3: REST messages can contain which of the following?
+a) XML
+b) text
+c) JSON
+d) All of the above
+
+Q4: Which of the following methods is idempotent?
+a) GET (correct)
+b) POST
+c) PATCH
+d) None of the above
+
+Q5: Which of the following methods is safe?
+a) POST
+b) PUT
+c) DELETE
+d) OPTIONS (correct)
+
+Summary:
+SOAP, which stands for Simple Object Access Protocol, is a messaging protocol for communication and interaction between web services and/or client applications. Typically used in Service Oriented Architecture, or SOA, SOAP messages include an envelope containing the header and body elements. The definitions and types of SOAP messages passed by a web service are included in a WSDL, or Web Service Description Language, along with various other information used by the particular web service. Along with types, portType, binding, and service tags, the WSDL file also contains a message tag which defines the messages exchanged between the client application and the web service. As previously mentioned, SOAP is commonly used in SOA, where multiple web services from different vendors may be utilized in tandem to fit the needs of a business or organization. Since each web service provides its own WSDL, each can be used essentially as a black box that only serves a particular function for the overall application at large. SOAP messages are the mechanism through which these different web services communicate. However, there is a bit of overhead involved with SOAP messages, as typically multiple lines of XML are used to access or interact with another web service. An alternative method of sending information, namely via HTTP action verbs coupled with lightweight JSON strings, is commonly used in the REST architectural style. REST, or Representational State Transfer, refers to a design methodology where every resource of a web service is uniformly accessible via Uniform Resource Identifiers, or URIs. Instead of using a WSDL to define the supported interactions, REST APIs are typically self descriptive, supporting the main four HTTP action verbs (GET, PUT, POST, DELETE). In REST, a client would access a particular endpoint identified by the URI and interact with the resource, typically sending / receiving server data in the form of JSON objects. Optionally, the REST response may include hyperlinks to other parts of the application, emulating a finite state machine via Hypermedia as the engine of application state, or HATEOAS. REST is styled in a way such that different layers of the application cannot 'see' beyond the layer they are interacting with. Further, REST is stateless, meaning that the application should not save any state of the application; all the necessary information should be passed along as part of the HTTP Request. Responses can be cached on the client side for easier / quicker parsing of data, and the client and server portions of the application should remain separated. A final, optional, constraint of REST is to extend the functionality of the client application by sending code on demand, mainly via simple scripting code snippets like Javascript. There are still some advantages for SOAP, namely in the support of legacy web services offered by companies like Salesforce, as well as inbuilt support of state-ful operations. For large, loosely coupled systems that leverage multiple web services and interfaces, a SOA with SOAP messages for services interaction may be a good option, and RESTs lack of overhead and overall ease of use continue to make it a popular choice for modern web applications.
+
+
+
+
+
+
+
+
